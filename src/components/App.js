@@ -1,26 +1,32 @@
-import React from 'react';
-import { useState } from 'react'
+import { useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import UserContext from './contexts/UserContext';
+import UserContext from "../contexts/UserContext";
+import TokenContext from "../contexts/TokenContext";
+import SignIn from "./login/SignIn";
+import SignUp from "./login/SignUp";
+import Timeline from "./timeline/Timeline";
 
 export default function App() {
-    const[userData,  setUserData] = useState({
-        'name': 'John Doe',
-        'image': 'john@mail.com',
-        'password': '123',
-        'token': 'None',
-        'dailyProgress': 50
-    });
+  const [token, setToken] = useState();
+  const [user, setUser] = useState();
 
-    return(
-        <UserContext.Provider value={{userData, setUserData}}>
-            <BrowserRouter>
-		    	<Switch>
-		    		<Route path="/" exact>
-                        asfoahsfuashfua
-                    </Route>
-                </Switch>
-		    </BrowserRouter>
-        </UserContext.Provider>
-    )
+  return (
+    <TokenContext.Provider value={{ token, setToken }}>
+      <UserContext.Provider value={{ user, setUser }}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact>
+              <SignIn></SignIn>
+            </Route>
+            <Route path="/sign-up" exact>
+              <SignUp></SignUp>
+            </Route>
+            <Route path="/timeline" exact>
+              <Timeline></Timeline>
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </UserContext.Provider>
+    </TokenContext.Provider>
+  );
 }
