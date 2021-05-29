@@ -39,27 +39,24 @@ export default function SignUp() {
       username: username,
       pictureUrl: picture,
     };
-    console.log(data);
+
     const url =
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up";
     const request = axios.post(url, data);
 
-    setTimeout(() => {
-      request.then((response) => {
-        setUser(response.data.user);
-        setToken(response.data.token);
-        setBlock(false);
-        history.push("/");
-      });
+    request.then((response) => {
+      setUser(response.data.user);
+      setToken(response.data.token);
+      setBlock(false);
+      history.push("/");
+    });
 
-      request.catch((error) => {
-        if (error.response.status === 400) {
-          alert("O email inserido já está cadastrado");
-          setBlock(false);
-          return;
-        }
-      });
-    }, 4000);
+    request.catch((error) => {
+      if (error.response.status === 400) {
+        alert("O email inserido já está cadastrado");
+        setBlock(false);
+      }
+    });
   }
 
   return (
