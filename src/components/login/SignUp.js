@@ -1,5 +1,5 @@
 import { Link, useHistory } from "react-router-dom";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import Container from "./Style";
 import UserContext from "../../contexts/UserContext";
@@ -24,12 +24,12 @@ export default function SignUp() {
     event.preventDefault();
 
     const data = {
-      email: email,
-      password: password,
-      username: username,
-      pictureUrl: picture,
+      "email": email,
+      "password": password,
+      "username": username,
+      "pictureUrl": picture,
     };
-
+    console.log(data);
     const url =
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up";
     const request = axios.post(url, data);
