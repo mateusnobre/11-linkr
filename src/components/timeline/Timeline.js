@@ -6,13 +6,11 @@ import { AiOutlineDown } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
-import UserContext from "../../contexts/UserContext";
-import TokenContext from "../../contexts/TokenContext";
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-  const { user, setUser } = useContext(UserContext);
-  const { token, setToken } = useContext(TokenContext);
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

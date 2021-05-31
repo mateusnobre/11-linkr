@@ -21,6 +21,8 @@ export default function SignIn() {
 
     const request = axios.post(url, data);
     request.then((response) => {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
       setToken(response.data.token);
       history.push("/timeline");
