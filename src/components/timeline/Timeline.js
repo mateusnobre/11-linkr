@@ -2,15 +2,17 @@ import { Link, useHistory } from "react-router-dom";
 import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
 import Container from "./Style";
-import { AiOutlineDown } from "react-icons/ai";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user'));
+  const history = useHistory();
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,18 +40,33 @@ export default function Timeline() {
     });
   }, []);
 
+  function logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    history.push("/");
+  }
+
+  function showMenu() {
+    isVisible ? setIsVisible(false) : setIsVisible(true);
+  }
+
   return (
     <Container>
       <div className="header">
         <h1>linkr</h1>
         <div className="profile">
           <IconContext.Provider value={{ className: "react-icons" }}>
-            <AiOutlineDown />
+            {isVisible ? <AiOutlineUp  onClick={showMenu} />:<AiOutlineDown  onClick={showMenu} />}
           </IconContext.Provider>
           <div className="profile-picture">
             <img src={user.avatar} alt="profile" />
           </div>
         </div>
+      </div>
+      <div className={isVisible ? "menu": "menu hidden"}>
+        <div className="logout">My posts</div>
+        <div className="logout">My likes</div>
+        <div className="logout" onClick={logout}>Logout</div>
       </div>
       <h2>timeline</h2>
       <div className="content">
