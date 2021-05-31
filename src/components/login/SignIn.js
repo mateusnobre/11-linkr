@@ -16,7 +16,7 @@ export default function SignIn() {
     event.preventDefault();
 
     const url =
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up";
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-in";
     const data = { email: email, password: password };
 
     const request = axios.post(url, data);
