@@ -191,6 +191,8 @@ const Container = styled.div`
     color: #9b9595;
     width: 303px;
     margin-top: 5px;
+    flex-wrap: wrap;
+    word-wrap: break-word;
   }
   .link {
     font-family: "Lato";
@@ -232,7 +234,7 @@ const Container = styled.div`
     padding-left: 13px;
     font-size: 15px;
     border: none;
-    background: #EFEFEF;
+    background: #efefef;
   }
   button {
     width: 112px;
@@ -243,6 +245,31 @@ const Container = styled.div`
     color: white;
     font-family: "Lato", sans-serif;
     font-size: 14px;
+  }
+  .trending-title {
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 27px;
+    line-height: 40px;
+    color: #ffffff;
+    margin-left: 16px;
+    margin-top: 9px;
+  }
+  .trending-bar {
+    width: 100%;
+    height: 1px;
+    background-color: #484848;
+    margin: 12px 0px;
+  }
+  .hashtags {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 19px;
+    color: #ffffff;
+    margin-left: 16px;
+    margin-top: 10px;
   }
 `;
 
