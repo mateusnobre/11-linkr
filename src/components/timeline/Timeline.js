@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Container from "./Style";
@@ -80,8 +80,8 @@ export default function Timeline() {
         </div>
       </div>
       <div className={isVisible ? "menu" : "menu hidden"}>
-        <div className="logout">My posts</div>
-        <div className="logout">My likes</div>
+        <Link to="my-posts" className="logout">My posts</Link>
+        <Link to="my-likes" className="logout">My likes</Link>
         <div className="logout" onClick={logout}>
           Logout
         </div>
