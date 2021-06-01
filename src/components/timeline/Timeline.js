@@ -1,6 +1,6 @@
-import { Link, useHistory } from "react-router-dom";
-import React, { useContext, useState, useEffect } from "react";
-import axios from 'axios';
+import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Container from "./Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
@@ -10,8 +10,10 @@ export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
   const config = {
     headers: {
@@ -28,7 +30,7 @@ export default function Timeline() {
 
     request.then((response) => {
       const newArray = response.data.posts;
-      if(newArray.length === 0) {
+      if (newArray.length === 0) {
         alert("Nenhum post encontrado");
       }
       setPosts([...newArray]);
@@ -41,13 +43,23 @@ export default function Timeline() {
   }, []);
 
   function logout() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     history.push("/");
   }
 
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
+  }
+
+  function newPost(event) {
+    event.preventDefault();
+
+    if(url === "") {
+      alert("Insira um link válido");
+      return;
+    }
+    alert("post criado");
   }
 
   return (
@@ -56,24 +68,58 @@ export default function Timeline() {
         <h1>linkr</h1>
         <div className="profile">
           <IconContext.Provider value={{ className: "react-icons" }}>
-            {isVisible ? <AiOutlineUp  onClick={showMenu} />:<AiOutlineDown  onClick={showMenu} />}
+            {isVisible ? (
+              <AiOutlineUp onClick={showMenu} />
+            ) : (
+              <AiOutlineDown onClick={showMenu} />
+            )}
           </IconContext.Provider>
           <div className="profile-picture">
             <img src={user.avatar} alt="profile" />
           </div>
         </div>
       </div>
-      <div className={isVisible ? "menu": "menu hidden"}>
+      <div className={isVisible ? "menu" : "menu hidden"}>
         <div className="logout">My posts</div>
         <div className="logout">My likes</div>
-        <div className="logout" onClick={logout}>Logout</div>
+        <div className="logout" onClick={logout}>
+          Logout
+        </div>
       </div>
       <h2>timeline</h2>
       <div className="content">
         {isLoading && <Loading />}
         <div className="posts">
-          {posts.map((post) => (<Post content={post} />))}
+          <div className="new-post">
+            <div className="profile-picture">
+              <img src={user.avatar} alt="profile" />
+            </div>
+            <div className="right">
+              <div className="new-post-title">
+                O que você tem para favoritar hoje?
+              </div>
+              <form onSubmit={newPost}>
+                <input
+                  type="url"
+                  placeholder="http:// ..."
+                  onChange={(e) => setUrl(e.target.value)}
+                  value={url}
+                ></input>
+                <input
+                  type="text"
+                  placeholder="Muito irado esse link falando de #javascript"
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
+                ></input>
+                <button>Publicar</button>
+              </form>
+            </div>
+          </div>
+          {posts.map((post) => (
+            <Post content={post} />
+          ))}
         </div>
+        <div className="trending"></div>
       </div>
     </Container>
   );

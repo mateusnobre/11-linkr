@@ -12,6 +12,10 @@ export default function SignIn() {
   const { token, setToken } = useContext(TokenContext);
   const history = useHistory();
 
+  if(localStorage.getItem('token')){
+    history.push('/timeline');
+  }
+
   function login(event) {
     event.preventDefault();
 
