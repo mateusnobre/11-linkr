@@ -39,12 +39,14 @@ export default function SignUp() {
       username: username,
       pictureUrl: picture,
     };
-
+    
     const url =
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up";
     const request = axios.post(url, data);
 
     request.then((response) => {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
       setToken(response.data.token);
       setBlock(false);
