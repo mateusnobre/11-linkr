@@ -22,7 +22,7 @@ const Container = styled.div`
     font-family: "Oswald", sans-serif;
     font-size: 30px;
     width: 440px;
-    word-break: keep-all;
+    word-break: break-word;
   }
   form {
     display: flex;
@@ -35,7 +35,7 @@ const Container = styled.div`
   }
   input {
     width: 80%;
-    height: 40px;
+    height: 50px;
     margin-bottom: 13px;
     border-radius: 6px;
     font-family: "Oswald", sans-serif;
@@ -45,8 +45,8 @@ const Container = styled.div`
     border: none;
   }
   button {
-    width: 83%;
-    height: 40px;
+    width: 80%;
+    height: 50px;
     background-color: #1877f2;
     border: none;
     border-radius: 6px;
@@ -59,6 +59,29 @@ const Container = styled.div`
     color: white;
     margin-top: 13px;
     text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    flex-flow: wrap row;
+    .logo {
+      height: 180px;
+      width: 100vw;
+      padding: 0px;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      font-size: 60px;
+    }
+    h2 {
+      font-size: 20px;
+      width: 237px;
+    }
+    form {
+      width: 100%;
+      justify-content: flex-start;
+      padding-top: 50px;
+    }
   }
 `;
 

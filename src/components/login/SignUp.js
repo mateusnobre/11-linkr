@@ -1,5 +1,6 @@
 import { Link, useHistory } from "react-router-dom";
 import React, { useContext, useState } from "react";
+import Loader from "react-loader-spinner";
 import axios from "axios";
 import Container from "./Style";
 import UserContext from "../../contexts/UserContext";
@@ -16,6 +17,7 @@ export default function SignUp() {
     username: false,
     picture: false,
   });
+  const [block, setBlock] = useState(false);
   const { token, setToken } = useContext(TokenContext);
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
@@ -23,12 +25,21 @@ export default function SignUp() {
   function submit(event) {
     event.preventDefault();
 
+    if (block) return;
+
+    if (!email || !password || !username || !picture) {
+      alert("Prencha os campos corretamente");
+      return;
+    }
+
+    setBlock(true);
     const data = {
-      "email": email,
-      "password": password,
-      "username": username,
-      "pictureUrl": picture,
+      email: email,
+      password: password,
+      username: username,
+      pictureUrl: picture,
     };
+    
     const url =
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/sign-up";
     const request = axios.post(url, data);
@@ -38,7 +49,15 @@ export default function SignUp() {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setUser(response.data.user);
       setToken(response.data.token);
-      history.push("/timeline");
+      setBlock(false);
+      history.push("/");
+    });
+
+    request.catch((error) => {
+      if (error.response.status === 400) {
+        alert("O email inserido já está cadastrado");
+        setBlock(false);
+      }
     });
   }
 
@@ -72,7 +91,19 @@ export default function SignUp() {
           onChange={(e) => setPicture(e.target.value)}
           value={picture}
         ></input>
-        <button>Sign Up</button>
+        <button>
+          {block ? (
+            <Loader
+              height={35}
+              width={35}
+              type="ThreeDots"
+              color="white"
+              visible={true}
+            ></Loader>
+          ) : (
+            "Sign Up"
+          )}
+        </button>
         <Link to="/">
           <h3>Switch back to log in</h3>
         </Link>
