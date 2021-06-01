@@ -93,6 +93,7 @@ const Container = styled.div`
     letter-spacing: 0.05em;
     color: #ffffff;
     margin-top: 10px;
+    text-decoration: none;
   }
   .hidden {
     display: none;
@@ -165,6 +166,7 @@ const Container = styled.div`
     border-radius: 11px;
     margin-top: 14px;
     padding-left: 19.31px;
+    word-wrap: break-word;
   }
   .link-box img {
     width: 153.44px;
