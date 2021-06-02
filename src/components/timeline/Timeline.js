@@ -106,7 +106,7 @@ export default function Timeline() {
                   value={url}
                 ></input>
                 <input
-            type="text"
+                  type="text"
                   placeholder="Muito irado esse link falando de #javascript"
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
