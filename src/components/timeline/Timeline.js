@@ -10,6 +10,7 @@ export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [hashtags, setHashtags] = useState([]);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("token");
@@ -28,6 +29,11 @@ export default function Timeline() {
       config
     );
 
+    const trendingRequest = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
+      config
+    );
+
     request.then((response) => {
       const newArray = response.data.posts;
       if (newArray.length === 0) {
@@ -39,6 +45,15 @@ export default function Timeline() {
 
     request.catch((error) => {
       alert("Houve uma falha ao obter os posts, por favor atualize a página");
+    });
+
+    trendingRequest.then((response) => {
+      const newArray = response.data.hashtags;
+      setHashtags([...newArray]);
+    });
+
+    trendingRequest.catch((error) => {
+      alert("Houve uma falha ao obter as hashtags");
     });
   }, []);
 
@@ -55,7 +70,7 @@ export default function Timeline() {
   function newPost(event) {
     event.preventDefault();
 
-    if(url === "") {
+    if (url === "") {
       alert("Insira um link válido");
       return;
     }
@@ -80,8 +95,12 @@ export default function Timeline() {
         </div>
       </div>
       <div className={isVisible ? "menu" : "menu hidden"}>
-        <Link to="my-posts" className="logout">My posts</Link>
-        <Link to="my-likes" className="logout">My likes</Link>
+        <Link to="my-posts" className="logout">
+          My posts
+        </Link>
+        <Link to="my-likes" className="logout">
+          My likes
+        </Link>
         <div className="logout" onClick={logout}>
           Logout
         </div>
@@ -119,7 +138,15 @@ export default function Timeline() {
             <Post content={post} config={config} userId={user.id} key={post.id}/>
           ))}
         </div>
-        <div className="trending"></div>
+        <div className="trending">
+          <div className="trending-title">trending</div>
+          <div className="trending-bar"></div>
+          {hashtags.map((hashtag) => (
+            <Link to={`hashtag/${hashtag.name}`}>
+              <div className="hashtags">#{hashtag.name}</div>
+            </Link>
+          ))}
+        </div>
       </div>
     </Container>
   );
