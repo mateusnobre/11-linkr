@@ -33,14 +33,14 @@ export default function Post(props) {
             {text}
           </ReactHashtag>
         </div>
-        <div className="link-box">
+        <a target="_blanck" href={link} className="link-box">
           <div>
             <div className="link-title">{linkTitle}</div>
             <div className="link-description">{linkDescription}</div>
             <a className="link" target="_blanck" href={link}>{link}</a>
           </div>
           <img src={linkImage} alt="image" />
-        </div>
+        </a>
       </div>
     </div>
   );

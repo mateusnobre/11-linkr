@@ -142,7 +142,7 @@ export default function Timeline() {
           <div className="trending-title">trending</div>
           <div className="trending-bar"></div>
           {hashtags.map((hashtag) => (
-            <Link to={`hashtag/${hashtag.name}`} style={{ textDecoration: 'none' }}>
+            <Link to={`hashtag/${hashtag.name}`}>
               <div className="hashtags">#{hashtag.name}</div>
             </Link>
           ))}

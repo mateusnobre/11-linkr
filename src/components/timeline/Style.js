@@ -271,6 +271,9 @@ const Container = styled.div`
     margin-left: 16px;
     margin-top: 10px;
   }
+  a {
+    text-decoration: none;
+  }
 `;
 
 export default Container;
