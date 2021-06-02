@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactHashtag from "react-hashtag";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FcLike } from "react-icons/fc";
@@ -12,23 +12,27 @@ export default function Post(props) {
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
-  for (let i = 0; i < likes.length; i++){
-    if (likes[i].userId == props.userId){
-      setIsLikedByMe(true);
+  useEffect(() => {
+    for (let i = 0; i < likes.length; i++){
+      if (likes[i].userId === props.userId){
+        setIsLikedByMe(true);
+      }
     }
-  }
+  }, []);
   function hashtagClick(val) {
     history.push(`/hashtag/${val}`);
   }
 
   function likePost() {
     if (!isLikedByMe) {
-      const likeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/like`, props.config);
+      const likeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/like`, null,  props.config);
       likeRequest.then(() => {setIsLikedByMe(true);})
+      likes.length += 1;
     }
     else if (isLikedByMe) {
-      const dislikeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/dislike`, props.config);
+      const dislikeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/dislike`, null, props.config);
       dislikeRequest.then(() => {setIsLikedByMe(false);})
+      likes.length -= 1;
     }
   }
 
