@@ -106,7 +106,7 @@ export default function Timeline() {
                   value={url}
                 ></input>
                 <input
-                  type="text"
+            type="text"
                   placeholder="Muito irado esse link falando de #javascript"
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
@@ -116,7 +116,7 @@ export default function Timeline() {
             </div>
           </div>
           {posts.map((post) => (
-            <Post content={post} config={config}/>
+            <Post content={post} config={config} userId={user.id}/>
           ))}
         </div>
         <div className="trending"></div>

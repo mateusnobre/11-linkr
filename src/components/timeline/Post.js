@@ -12,17 +12,24 @@ export default function Post(props) {
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
+  for (let i = 0; i < likes.length; i++){
+    if (likes[i].userId == props.userId){
+      setIsLikedByMe(true);
+    }
+  }
   function hashtagClick(val) {
     history.push(`/hashtag/${val}`);
   }
 
   function likePost() {
     if (!isLikedByMe) {
-      console.log(props.config)
       const likeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/like`, props.config);
       likeRequest.then(() => {setIsLikedByMe(true);})
     }
-
+    else if (isLikedByMe) {
+      const dislikeRequest = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/dislike`, props.config);
+      dislikeRequest.then(() => {setIsLikedByMe(false);})
+    }
   }
 
   return (
