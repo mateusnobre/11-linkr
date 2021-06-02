@@ -116,7 +116,7 @@ export default function Timeline() {
             </div>
           </div>
           {posts.map((post) => (
-            <Post content={post} />
+            <Post content={post} config={config}/>
           ))}
         </div>
         <div className="trending"></div>
