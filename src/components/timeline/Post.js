@@ -60,10 +60,10 @@ export default function Post(props) {
           </ReactHashtag>
         </div>
         <a target="_blanck" href={link} className="link-box">
-          <div>
+          <div className="left">
             <div className="link-title">{linkTitle}</div>
             <div className="link-description">{linkDescription}</div>
-            <a className="link" target="_blanck" href={link}>{link}</a>
+            <div className="link-link">{link}</div>
           </div>
           <img src={linkImage} alt="image" />
         </a>

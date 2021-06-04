@@ -9,10 +9,12 @@ import Post from "./Post";
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isEnable, setIsEnable] = useState(true);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [render, setRender] = useState([1]);
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -55,7 +57,7 @@ export default function Timeline() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
-  }, []);
+  }, render);
 
   function logout() {
     localStorage.removeItem("user");
@@ -74,7 +76,31 @@ export default function Timeline() {
       alert("Insira um link válido");
       return;
     }
-    alert("post criado");
+
+    setIsEnable(false);
+
+    const body = { text: description, link: url };
+    const request = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      body,
+      config
+    );
+
+    request.then((response) => {
+      if (render[0] != 2) {
+        setRender([2]);
+      } else {
+        setRender([1]);
+      }
+      setUrl("");
+      setDescription("");
+      setIsEnable(true);
+    });
+
+    request.catch((error) => {
+      alert("Houve um erro ao publicar seu link");
+      setIsEnable(true);
+    });
   }
 
   return (
@@ -123,19 +149,28 @@ export default function Timeline() {
                   placeholder="http:// ..."
                   onChange={(e) => setUrl(e.target.value)}
                   value={url}
+                  disabled={!isEnable}
                 ></input>
                 <input
                   type="text"
                   placeholder="Muito irado esse link falando de #javascript"
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
+                  disabled={!isEnable}
                 ></input>
-                <button>Publicar</button>
+                <button disabled={!isEnable}>
+                  {isEnable ? "Publicar" : "Publicando..."}
+                </button>
               </form>
             </div>
           </div>
           {posts.map((post) => (
-            <Post content={post} config={config} userId={user.id} key={post.id}/>
+            <Post
+              content={post}
+              config={config}
+              userId={user.id}
+              key={post.id}
+            />
           ))}
         </div>
         <div className="trending">
