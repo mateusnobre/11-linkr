@@ -66,7 +66,6 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 16px;
     width: 611px;
-    height: 276px;
     background: #171717;
     border-radius: 16px;
     margin-bottom: 29px;
@@ -151,6 +150,7 @@ const Container = styled.div`
     line-height: 20px;
     color: #b7b7b7;
     margin-top: 7px;
+    margin-bottom: 14px;
   }
   .right {
     width: 502px;
@@ -164,7 +164,6 @@ const Container = styled.div`
     border: 1px solid #4d4d4d;
     box-sizing: border-box;
     border-radius: 11px;
-    margin-top: 14px;
     padding-left: 19.31px;
     word-wrap: break-word;
   }
@@ -276,6 +275,15 @@ const Container = styled.div`
   }
   a {
     text-decoration: none;
+  }
+  .url-video {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 20px;
+    color: #b7b7b7;
+    margin-top: 7px;
   }
 `;
 
