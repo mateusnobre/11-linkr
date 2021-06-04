@@ -6,6 +6,7 @@ import SignIn from "./login/SignIn";
 import SignUp from "./login/SignUp";
 import Timeline from "./timeline/Timeline";
 import Hashtag from "./timeline/Hashtag";
+import User from "./timeline/User";
 
 export default function App() {
   const [token, setToken] = useState();
@@ -27,6 +28,9 @@ export default function App() {
             </Route>
             <Route path="/hashtag/:hashtag" exact>
               <Hashtag></Hashtag>
+            </Route>
+            <Route path="/user/:id" exact>
+              <User></User>
             </Route>
           </Switch>
         </BrowserRouter>
