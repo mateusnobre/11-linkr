@@ -173,6 +173,9 @@ const Container = styled.div`
     height: 155px;
     border-radius: 0px 12px 13px 0px;
   }
+  .left {
+    width: 303px;
+  }
   .link-title {
     font-family: "Lato";
     font-style: normal;
@@ -194,7 +197,7 @@ const Container = styled.div`
     flex-wrap: wrap;
     word-wrap: break-word;
   }
-  .link {
+  .link-link {
     font-family: "Lato";
     font-style: normal;
     font-weight: normal;
