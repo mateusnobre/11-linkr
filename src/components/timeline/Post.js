@@ -25,7 +25,7 @@ export default function Post(props) {
     }
   }, []);
   function hashtagClick(val) {
-    history.push(`/hashtag/${val}`);
+    history.push(`/hashtag/${val.slice(1)}`);
   }
 
   function likePost() {
@@ -107,7 +107,7 @@ export default function Post(props) {
         ) : (
           <div>
             <ReactPlayer url={link} controls width="501px" height="281px" />
-            <div className="url-video">{link}</div>
+            <a target="_blanck" href={link} className="url-video">{link}</a>
           </div>
         )}
       </div>

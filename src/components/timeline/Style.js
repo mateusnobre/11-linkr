@@ -134,6 +134,7 @@ const Container = styled.div`
   h1 {
     font-family: "Passion One", cursive;
     font-size: 49px;
+    color: white;
   }
   h2 {
     font-family: "Oswald", sans-serif;
@@ -160,7 +161,6 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 503px;
-    height: 155px;
     border: 1px solid #4d4d4d;
     box-sizing: border-box;
     border-radius: 11px;
@@ -183,6 +183,7 @@ const Container = styled.div`
     line-height: 19px;
     color: #cecece;
     width: 250px;
+    margin-top: 10px;
   }
   .link-description {
     font-family: "Lato";
@@ -206,6 +207,7 @@ const Container = styled.div`
     text-decoration: none;
     word-wrap: break-word;
     margin-top: 12px;
+    margin-bottom: 10px;
   }
   span {
     font-family: "Lato";
@@ -281,9 +283,8 @@ const Container = styled.div`
     font-style: normal;
     font-weight: normal;
     font-size: 17px;
-    line-height: 20px;
+    line-height: 31px;
     color: #b7b7b7;
-    margin-top: 7px;
   }
 `;
 
