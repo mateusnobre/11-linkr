@@ -16,7 +16,7 @@ export default function User() {
   const [hashtags, setHashtags] = useState([]);
   const [username, setUsername] = useState("");
   const [imageURL, setImageURL] = useState("");
-  const [userId, setUserId] = useState(-1);
+  const [userId, setUserId] = useState();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -80,7 +80,8 @@ export default function User() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
-
+  }, render);
+  useEffect(() => {
     const followedUsersRequest = axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows`,
       config
@@ -88,14 +89,19 @@ export default function User() {
     followedUsersRequest.then((response) => {
       const followedUsers = response.data.users;
       for (let i = 0; i < followedUsers.length; i++){
-        if(followedUsers[i].id === userId){
+        console.log(followedUsers[i])
+        console.log(userId)
+
+        if(followedUsers[i].id == userId){
+          console.log('entrei')
           setIsFollowedByMe(true);
         }
       }
-    })
-
-  }, render);
-
+    });
+    followedUsersRequest.catch((error) => {
+      alert("Houve uma buscar os usuários seguidos por você");
+    });
+  }, userId);
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -116,6 +122,9 @@ export default function User() {
       followRequest.then((response) => {
         setIsFollowedByMe(true);
       });
+      followRequest.catch((response) => {
+        alert("Não foi possível seguir esse usuário");
+      });
     } else if (isFollowedByMe) {
       const unfollowRequest = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/unfollow`,
@@ -124,6 +133,9 @@ export default function User() {
       );
       unfollowRequest.then((response) => {
         setIsFollowedByMe(false);
+      });
+      unfollowRequest.catch((response) => {
+        alert("Não foi possível deixar de seguir esse usuário");
       });
     }
   }
