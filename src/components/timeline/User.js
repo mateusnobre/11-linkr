@@ -6,12 +6,17 @@ import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
+import styled from 'styled-components';
+
 export default function User() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isFollowedByMe, setIsFollowedByMe] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
   const [username, setUsername] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const [userId, setUserId] = useState(-1);
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -59,6 +64,8 @@ export default function User() {
 
     userRequest.then((response) => {
       setUsername(response.data.user.username);
+      setImageURL(response.data.user.avatar);
+      setUserId(response.data.user.id);
     });
 
     userRequest.catch((error) => {
@@ -73,6 +80,20 @@ export default function User() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
+
+    const followedUsersRequest = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows`,
+      config
+    );
+    followedUsersRequest.then((response) => {
+      const followedUsers = response.data.users;
+      for (let i = 0; i < followedUsers.length; i++){
+        if(followedUsers[i].id === userId){
+          setIsFollowedByMe(true);
+        }
+      }
+    })
+
   }, render);
 
   function logout() {
@@ -84,6 +105,29 @@ export default function User() {
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
+  
+  function followUser() {
+    if (!isFollowedByMe) {
+      const followRequest = axios.post(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/follow`,
+        null,
+        config
+      );
+      followRequest.then((response) => {
+        setIsFollowedByMe(true);
+      });
+    } else if (isFollowedByMe) {
+      const unfollowRequest = axios.post(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/unfollow`,
+        null,
+        config
+      );
+      unfollowRequest.then((response) => {
+        setIsFollowedByMe(false);
+      });
+    }
+  }
+
 
   return (
     <Container>
@@ -115,10 +159,19 @@ export default function User() {
           Logout
         </div>
       </div>
-      <h2>{username}</h2>
+      <UserHeader>
+        <div>
+          <img src={imageURL} alt="profile" />
+        </div>
+        <div>
+          <h2>{username}'s posts</h2>
+        </div>
+        {isFollowedByMe && <Unfollow onClick={followUser}>Unfollow</Unfollow>}
+        {!isFollowedByMe && <Follow onClick={followUser}>Follow</Follow>}
+      </UserHeader>
       <div className="content">
         {isLoading && <Loading />}
-        <div className="posts">
+        <div className="my-posts">
           {posts.map((post) => (
             <Post
               content={post}
@@ -141,3 +194,55 @@ export default function User() {
     </Container>
   );
 }
+const UserHeader = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 937px;
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    margin-left: 18px;
+  }
+  h2 {
+    user-select: none;
+    margin-left: 18px;
+    line-height: 50px;
+  }
+`
+const Follow = styled.div`
+  user-select: none;
+  position: absolute;
+  background: #1877F2;
+  border-radius: 5px;
+  width: 112px;
+  height: 31px;
+  line-height: 31px;
+  text-align: center;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  top: 69px;
+  right: 0px;
+`
+
+const Unfollow = styled.div`
+  user-select: none;
+  position: absolute;
+  color: #1877F2;
+  background: #FFFFFF;
+  border-radius: 5px;
+  width: 112px;
+  height: 31px;
+  line-height: 31px;
+  text-align: center;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  top: 69px;
+  right: 0px;
+`
