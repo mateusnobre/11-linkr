@@ -8,6 +8,7 @@ import Timeline from "./timeline/Timeline";
 import Hashtag from "./timeline/Hashtag";
 import User from "./timeline/User";
 import MyPosts from './my_posts/MyPosts';
+import MyLikes from './my_likes/MyLikes';
 
 export default function App() {
   const [token, setToken] = useState();
@@ -29,6 +30,9 @@ export default function App() {
             </Route>
             <Route path="/my-posts" exact>
               <MyPosts/>
+            </Route>
+            <Route path="/my-likes" exact>
+              <MyLikes/>
             </Route>
             <Route path="/hashtag/:hashtag" exact>
               <Hashtag></Hashtag>

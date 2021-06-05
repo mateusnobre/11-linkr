@@ -27,7 +27,7 @@ export default function Timeline() {
   useEffect(() => {
     setIsLoading(true);
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`,
       config
     );
 
@@ -68,8 +68,7 @@ export default function Timeline() {
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
-
-
+  
   return (
     <Container>
       <div className="header">
