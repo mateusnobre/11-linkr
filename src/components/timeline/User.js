@@ -10,6 +10,7 @@ import styled from 'styled-components';
 
 export default function User() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingFollow, setIsLoadingFollow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isFollowedByMe, setIsFollowedByMe] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -82,6 +83,7 @@ export default function User() {
     });
   }, render);
   useEffect(() => {
+    setIsLoadingFollow(true)
     const followedUsersRequest = axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows`,
       config
@@ -89,11 +91,7 @@ export default function User() {
     followedUsersRequest.then((response) => {
       const followedUsers = response.data.users;
       for (let i = 0; i < followedUsers.length; i++){
-        console.log(followedUsers[i])
-        console.log(userId)
-
         if(followedUsers[i].id == userId){
-          console.log('entrei')
           setIsFollowedByMe(true);
         }
       }
@@ -101,6 +99,7 @@ export default function User() {
     followedUsersRequest.catch((error) => {
       alert("Houve uma buscar os usuários seguidos por você");
     });
+    setIsLoadingFollow(false);
   }, userId);
   function logout() {
     localStorage.removeItem("user");
@@ -113,6 +112,7 @@ export default function User() {
   }
   
   function followUser() {
+    setIsLoadingFollow(true)
     if (!isFollowedByMe) {
       const followRequest = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/follow`,
@@ -138,6 +138,7 @@ export default function User() {
         alert("Não foi possível deixar de seguir esse usuário");
       });
     }
+    setIsLoadingFollow(false);
   }
 
 
@@ -178,8 +179,8 @@ export default function User() {
         <div>
           <h2>{username}'s posts</h2>
         </div>
-        {isFollowedByMe && <Unfollow onClick={followUser}>Unfollow</Unfollow>}
-        {!isFollowedByMe && <Follow onClick={followUser}>Follow</Follow>}
+        {!isLoadingFollow && isFollowedByMe && <Unfollow onClick={followUser}>Unfollow</Unfollow>}
+        {!isLoadingFollow && !isFollowedByMe && <Follow onClick={followUser}>Follow</Follow>}
       </UserHeader>
       <div className="content">
         {isLoading && <Loading />}
