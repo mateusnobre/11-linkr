@@ -1,11 +1,11 @@
 import { Link, useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Container from "./Style";
+import Container from "../timeline/Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
-import Post from "./Post";
+import Post from "../timeline/Post";
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -27,7 +27,7 @@ export default function Timeline() {
   useEffect(() => {
     setIsLoading(true);
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
       config
     );
 
@@ -131,39 +131,10 @@ export default function Timeline() {
           Logout
         </div>
       </div>
-      <h2>timeline</h2>
+      <h2>My posts</h2>
       <div className="content">
         {isLoading && <Loading />}
-        <div className="posts">
-          <div className="new-post">
-            <div className="profile-picture">
-              <img src={user.avatar} alt="profile" />
-            </div>
-            <div className="right">
-              <div className="new-post-title">
-                O que você tem para favoritar hoje?
-              </div>
-              <form onSubmit={newPost}>
-                <input
-                  type="url"
-                  placeholder="http:// ..."
-                  onChange={(e) => setUrl(e.target.value)}
-                  value={url}
-                  disabled={!isEnable}
-                ></input>
-                <input
-                  type="text"
-                  placeholder="Muito irado esse link falando de #javascript"
-                  onChange={(e) => setDescription(e.target.value)}
-                  value={description}
-                  disabled={!isEnable}
-                ></input>
-                <button disabled={!isEnable}>
-                  {isEnable ? "Publicar" : "Publicando..."}
-                </button>
-              </form>
-            </div>
-          </div>
+        <div className="my-posts">
           {posts.map((post) => (
             <Post
               content={post}
