@@ -27,7 +27,7 @@ export default function Timeline() {
   useEffect(() => {
     setIsLoading(true);
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`,
       config
     );
 
@@ -69,7 +69,6 @@ export default function Timeline() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
 
-
   return (
     <Container>
       <div className="header">
@@ -98,7 +97,7 @@ export default function Timeline() {
           Logout
         </div>
       </div>
-      <h2>My posts</h2>
+      <h2>My likes</h2>
       <div className="content">
         {isLoading && <Loading />}
         <div className="my-posts">
