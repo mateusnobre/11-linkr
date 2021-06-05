@@ -294,6 +294,16 @@ const Container = styled.div`
     line-height: 31px;
     color: #b7b7b7;
   }
+  .find-hashtag {
+    display: flex;
+    justify-content: center;
+    width: 269px;
+    height: 35px;
+    background: #252525;
+    border-radius: 8px;
+    margin-right: 16px;
+    margin-top: 15px;
+  }
 `;
 
 export default Container;

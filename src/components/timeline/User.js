@@ -14,6 +14,7 @@ export default function User() {
   const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  const [hashtagSearch, setHashtagSearch] = useState("");
   const history = useHistory();
   const params = useParams();
   const [render, setRender] = useState([params.id]);
@@ -23,7 +24,7 @@ export default function User() {
     },
   };
 
-  if(render[0] !== params.id) {
+  if (render[0] !== params.id) {
     setRender([params.id]);
   }
 
@@ -85,6 +86,11 @@ export default function User() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
 
+  function findHashtag(event) {
+    event.preventDefault();
+    history.push(`/hashtag/${hashtagSearch}`);
+  }
+
   return (
     <Container>
       <div className="header">
@@ -136,6 +142,15 @@ export default function User() {
               <div className="hashtags">#{hashtag.name}</div>
             </Link>
           ))}
+          <form onSubmit={findHashtag}>
+            <input
+              type="text"
+              placeholder="# type a hashtag"
+              onChange={(e) => setHashtagSearch(e.target.value)}
+              value={hashtagSearch}
+              className="find-hashtag"
+            ></input>
+          </form>
         </div>
       </div>
     </Container>
