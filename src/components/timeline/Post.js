@@ -61,7 +61,7 @@ export default function Post(props) {
     <div className="post">
       <div className="profile-picture">
         <Link to={`/user/${user.id}`}>
-          <img src={user.avatar}></img>
+          <img src={user.avatar} alt='Avatar'></img>
         </Link>
         <IconContext.Provider value={{ className: "react-icons" }}>
           {!isLikedByMe && (
@@ -102,7 +102,7 @@ export default function Post(props) {
               <div className="link-description">{linkDescription}</div>
               <div className="link-link">{link}</div>
             </div>
-            <img src={linkImage} alt="image" />
+            <img src={linkImage} alt="Preview" />
           </a>
         ) : (
           <div>

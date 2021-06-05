@@ -61,6 +61,14 @@ const Container = styled.div`
     align-items: center;
     width: 611px;
   }
+  .my-posts{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 611px;
+  }
+  }
   .post {
     display: flex;
     justify-content: space-between;
