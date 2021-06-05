@@ -6,30 +6,36 @@ import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
-export default function Hashtag() {
+export default function User() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
+  const [username, setUsername] = useState("");
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
   const params = useParams();
-  const [render, setRender] = useState([params.hashtag]);
+  const [render, setRender] = useState([params.id]);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  if(render[0] !== params.hashtag) {
-      setRender([params.hashtag]);
+  if(render[0] !== params.id) {
+    setRender([params.id]);
   }
 
   useEffect(() => {
     setIsLoading(true);
     const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/${params.hashtag}/posts`,
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${params.id}/posts`,
+      config
+    );
+
+    const userRequest = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${params.id}`,
       config
     );
 
@@ -49,6 +55,14 @@ export default function Hashtag() {
 
     request.catch((error) => {
       alert("Houve uma falha ao obter os posts, por favor atualize a página");
+    });
+
+    userRequest.then((response) => {
+      setUsername(response.data.user.username);
+    });
+
+    userRequest.catch((error) => {
+      alert("Houve uma falha ao obter o usuário");
     });
 
     trendingRequest.then((response) => {
@@ -101,7 +115,7 @@ export default function Hashtag() {
           Logout
         </div>
       </div>
-      <h2>#{params.hashtag}</h2>
+      <h2>{username}</h2>
       <div className="content">
         {isLoading && <Loading />}
         <div className="posts">
