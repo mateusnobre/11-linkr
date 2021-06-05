@@ -11,6 +11,7 @@ export default function Hashtag() {
   const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
+  const [hashtagSearch, setHashtagSearch] = useState("");
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -22,8 +23,8 @@ export default function Hashtag() {
     },
   };
 
-  if(render[0] !== params.hashtag) {
-      setRender([params.hashtag]);
+  if (render[0] !== params.hashtag) {
+    setRender([params.hashtag]);
   }
 
   useEffect(() => {
@@ -69,6 +70,11 @@ export default function Hashtag() {
 
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
+  }
+
+  function findHashtag(event) {
+    event.preventDefault();
+    history.push(`/hashtag/${hashtagSearch}`);
   }
 
   return (
@@ -122,6 +128,15 @@ export default function Hashtag() {
               <div className="hashtags">#{hashtag.name}</div>
             </Link>
           ))}
+          <form onSubmit={findHashtag}>
+            <input
+              type="text"
+              placeholder="# type a hashtag"
+              onChange={(e) => setHashtagSearch(e.target.value)}
+              value={hashtagSearch}
+              className="find-hashtag"
+            ></input>
+          </form>
         </div>
       </div>
     </Container>

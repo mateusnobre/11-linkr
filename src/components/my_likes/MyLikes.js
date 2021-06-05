@@ -15,6 +15,7 @@ export default function Timeline() {
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [render, setRender] = useState([1]);
+  const [hashtagSearch, setHashtagSearch] = useState("");
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -69,10 +70,17 @@ export default function Timeline() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
 
+  function findHashtag(event) {
+    event.preventDefault();
+    history.push(`/hashtag/${hashtagSearch}`);
+  }
+
   return (
     <Container>
       <div className="header">
-        <h1>linkr</h1>
+        <Link to="/">
+          <h1>linkr</h1>
+        </Link>
         <div className="profile">
           <IconContext.Provider value={{ className: "react-icons" }}>
             {isVisible ? (
@@ -118,6 +126,15 @@ export default function Timeline() {
               <div className="hashtags">#{hashtag.name}</div>
             </Link>
           ))}
+          <form onSubmit={findHashtag}>
+            <input
+              type="text"
+              placeholder="# type a hashtag"
+              onChange={(e) => setHashtagSearch(e.target.value)}
+              value={hashtagSearch}
+              className="find-hashtag"
+            ></input>
+          </form>
         </div>
       </div>
     </Container>
