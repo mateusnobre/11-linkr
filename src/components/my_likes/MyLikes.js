@@ -68,7 +68,7 @@ export default function Timeline() {
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
-  
+
   return (
     <Container>
       <div className="header">
@@ -97,7 +97,7 @@ export default function Timeline() {
           Logout
         </div>
       </div>
-      <h2>My posts</h2>
+      <h2>My likes</h2>
       <div className="content">
         {isLoading && <Loading />}
         <div className="my-posts">
