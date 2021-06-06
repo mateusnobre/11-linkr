@@ -10,6 +10,35 @@ import axios from "axios";
 import Modal from 'react-modal';
 import styled from 'styled-components';
 
+const PreviewDialogBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img{
+    height: 90%;
+    width: 95%;
+  }
+`
+const PreviewDialogHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+const NewTabButton = styled.div`
+  width: 138px;
+  height: 31px;
+  line-height: 31px;
+  text-align: center;
+  color: white;
+  font-family: Lato;
+  font-weight: bold;
+  font-size: 14px;
+  background: #1877F2;
+  border-radius: 5px;
+`
+
+
 export default function Post(props) {
   
 
@@ -73,13 +102,13 @@ export default function Post(props) {
             isOpen={previewMode}
             contentLabel="Preview Modal"
           >
-          <div className='preview-dialog-box'>
-            <div className='preview-dialog-header'>
-              <div className='new-tab-button' onClick={()=> {window.open(link, "_blank"); hidePreviewDialog()}}>Open in new tab</div>
+          <PreviewDialogBox>
+            <PreviewDialogHeader>
+              <NewTabButton onClick={()=> {window.open(link, "_blank"); hidePreviewDialog()}}>Open in new tab</NewTabButton>
               <AiOutlineClose onClick={hidePreviewDialog}></AiOutlineClose>
-            </div>
+            </PreviewDialogHeader>
           <img src={linkImage} alt={linkTitle}/>
-          </div>
+          </PreviewDialogBox>
         </Modal>
       <div className="profile-picture">
         <Link to={`/user/${user.id}`}>
