@@ -1,7 +1,7 @@
 import { Link, useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container } from "../timeline/Style";
+import Container from "../timeline/Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";

@@ -9,8 +9,8 @@ import { Link, useHistory } from "react-router-dom";
 import { IconContext } from "react-icons";
 import ReactPlayer from "react-player";
 import axios from "axios";
-import { modalStyle } from "./Style";
 import Loading from "../Loading";
+import styled from "styled-components";
 
 export default function Post(props) {
   const { content, userId, render, setRender } = props;
@@ -160,17 +160,56 @@ export default function Post(props) {
         onRequestClose={() => setModalOpen(false)}
         style={modalStyle}
       >
-        <h1 className="hidden">
-          Tem certeza que deseja excluir essa publicaçao
-        </h1>
-        <button className="modal-back" onClick={returnButton}>
-          Não, voltar
-        </button>
-        <button className="modal-delete" onClick={deletePost}>
-          Sim, excluir
-        </button>
+        <ModalText>
+          Tem certeza que deseja <br />
+          excluir essa publicaçao
+        </ModalText>
+        <ModalReturn onClick={returnButton}>Não, voltar</ModalReturn>
+        <ModalConfirm onClick={deletePost}>Sim, excluir</ModalConfirm>
         {isLoading && <Loading />}
       </Modal>
     </div>
   );
 }
+
+const modalStyle = {
+  content: {
+    top: "25%",
+    left: "25%",
+    right: "25%",
+    bottom: "25%",
+    background: "#333333",
+    borderRadius: "50px",
+    color: "white",
+  },
+};
+
+const ModalText = styled.h1`
+  color: #ffffff;
+  font-family: "Lato";
+  font-size: 30px;
+  text-align: center;
+  margin-top: 10px;
+`;
+const ModalReturn = styled.button`
+  width: 134px;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 60px;
+  border: none;
+  background-color: white;
+  color: #1877f2;
+  margin-left: 150px;
+  font-family: "Lato";
+`;
+const ModalConfirm = styled.button`
+  width: 134px;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 40px;
+  border: none;
+  background-color: #1877f2;
+  color: white;
+  margin-left: 40px;
+  font-family: "Lato";
+`;

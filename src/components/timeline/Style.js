@@ -299,19 +299,8 @@ const Container = styled.div`
     right: 20px;
     color: red;
     font-size: 20px;
+    cursor: pointer;
   }
 `;
 
-const modalStyle = {
-  content: {
-    top: "30%",
-    left: "30%",
-    right: "30%",
-    bottom: "30%",
-    background: "#333333",
-    borderRadius: "50px",
-    color: "white",
-  },
-};
-
-export { Container, modalStyle };
+export default Container;
