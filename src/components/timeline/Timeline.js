@@ -7,6 +7,7 @@ import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
 import { DebounceInput } from "react-debounce-input";
+import useInterval from "react-useinterval";
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -27,7 +28,7 @@ export default function Timeline() {
     },
   };
 
-  useEffect(() => {
+  function loadPage() {
     setIsLoading(true);
     const trendingRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
@@ -72,7 +73,9 @@ export default function Timeline() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
-  }, render);
+  }
+  useEffect(loadPage, render);
+  useInterval(loadPage, 15000);
 
   function logout() {
     localStorage.removeItem("user");
