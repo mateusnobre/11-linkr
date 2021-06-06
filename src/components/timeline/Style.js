@@ -83,6 +83,28 @@ const Container = styled.div`
     margin-bottom: 29px;
     position: relative;
   }
+  .new-tab-button {
+    width: 138px;
+    height: 31px;
+    background: #1877F2;
+    border-radius: 5px;
+  }
+  .preview-dialog-box {
+    width: 67%;
+    height: 88%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .preview-dialog-box img{
+    height: 90%;
+    width: 95%;
+  }
+  .preview-dialog-header {
+    display: flex;
+    justify-content: space-between;
+  }
   .menu {
     position: fixed;
     width: 150px;

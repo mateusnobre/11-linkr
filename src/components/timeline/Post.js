@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import ReactHashtag from "react-hashtag";
 import ReactTooltip from "react-tooltip";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineClose } from "react-icons/ai";
 import { FcLike } from "react-icons/fc";
 import { Link, useHistory } from "react-router-dom";
 import { IconContext } from "react-icons";
 import ReactPlayer from "react-player";
 import axios from "axios";
+import Modal from 'react-modal';
 import styled from 'styled-components';
 
 export default function Post(props) {
+  
+
   const { content } = props;
   const { id, text, link, linkTitle, linkDescription, linkImage, user, likes } =
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
   const [likesArr, setLikesArr] = useState(likes);
   var getYouTubeID = require("get-youtube-id");
 
@@ -57,9 +61,26 @@ export default function Post(props) {
       });
     }
   }
-
+  function showPreviewDialog(){
+    setPreviewMode(true);
+  }
+  function hidePreviewDialog(){
+    setPreviewMode(false);
+  }
   return (
     <div className="post">
+        <Modal
+            isOpen={previewMode}
+            contentLabel="Preview Modal"
+          >
+          <div className='preview-dialog-box'>
+            <div className='preview-dialog-header'>
+              <div className='new-tab-button' onClick={()=> {window.open(link, "_blank"); hidePreviewDialog()}}>Open in new tab</div>
+              <AiOutlineClose onClick={hidePreviewDialog}></AiOutlineClose>
+            </div>
+          <img src={linkImage} alt={linkTitle}/>
+          </div>
+        </Modal>
       <div className="profile-picture">
         <Link to={`/user/${user.id}`}>
           <img src={user.avatar} alt='Avatar'></img>
@@ -95,7 +116,7 @@ export default function Post(props) {
           </ReactHashtag>
         </div>
         {getYouTubeID(link) === null ? (
-          <a target="_blanck" href={link} className="link-box">
+          <a target="_blanck" onClick={showPreviewDialog} className="link-box">
             <div className="left">
               <div className="link-title">{linkTitle}</div>
               <div className="link-description">{linkDescription}</div>
@@ -113,29 +134,3 @@ export default function Post(props) {
     </div>
   );
 }
-
-
-const previewDialogBox = styled.div`
-  width: 67%;
-  height: 88%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  img {
-    height: 90%;
-    width: 95%;
-  }
-`
-
-const previewDialogHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const newTabButton = styled.div`
-  width: 138px;
-  height: 31px;
-  background: #1877F2;
-  border-radius: 5px;
-`
