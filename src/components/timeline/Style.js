@@ -29,6 +29,60 @@ const Container = styled.div`
     font-size: 20px;
     color: white;
   }
+  .search {
+    position: relative;
+    width: 40vw;
+    display: flex;
+    flex-flow: wrap column;
+    /* overflow-y: hidden;   */
+    /* background-color: salmon; */
+  }
+  .search-input {
+    font-family: "FontAwesome";
+    position: absolute;
+    top: -20px;
+    width: 100%;
+    height: 45px;
+    background-color: #ffffff;
+    outline: none;
+    /* border-radius: 8px 8px 0px 0px; */
+  }
+  .search-users {
+    position: absolute;
+    top: 22px;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: hidden;
+    background-color: #e7e7e7;
+    border-radius: 0px 0px 8px 8px;
+  }
+  .search-user {
+    display: flex;
+    flex-flow: nowrap;
+    align-items: center;
+    height: 35px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    cursor: pointer;
+  }
+  .search-users img {
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    margin-right: 12px;
+    margin-left: 17px;
+  }
+  .search-users p {
+    width: 100%;
+    font-family: "Lato";
+    font-size: 18px;
+    color: #515151;
+  }
+  .search-user span {
+    font-family: "Lato";
+    font-size: 15px;
+    color: #c5c5c5;
+  }
   .profile-picture {
     display: flex;
     flex-direction: column;
@@ -66,7 +120,7 @@ const Container = styled.div`
     align-items: center;
     width: 611px;
   }
-  .my-posts{
+  .my-posts {
     display: flex;
     flex-direction: column;
     justify-content: start;
