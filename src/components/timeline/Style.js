@@ -61,13 +61,12 @@ const Container = styled.div`
     align-items: center;
     width: 611px;
   }
-  .my-posts{
+  .my-posts {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     width: 611px;
-  }
   }
   .post {
     display: flex;
@@ -193,6 +192,7 @@ const Container = styled.div`
     width: 250px;
     margin-top: 10px;
   }
+
   .link-description {
     font-family: "Lato";
     font-style: normal;
@@ -294,6 +294,24 @@ const Container = styled.div`
     line-height: 31px;
     color: #b7b7b7;
   }
+  .delete {
+    position: absolute;
+    right: 20px;
+    color: red;
+    font-size: 20px;
+  }
 `;
 
-export default Container;
+const modalStyle = {
+  content: {
+    top: "30%",
+    left: "30%",
+    right: "30%",
+    bottom: "30%",
+    background: "#333333",
+    borderRadius: "50px",
+    color: "white",
+  },
+};
+
+export { Container, modalStyle };

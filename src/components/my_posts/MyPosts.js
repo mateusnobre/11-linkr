@@ -1,7 +1,7 @@
 import { Link, useHistory } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Container from "../timeline/Style";
+import { Container } from "../timeline/Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
@@ -69,7 +69,6 @@ export default function Timeline() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
 
-
   return (
     <Container>
       <div className="header">
@@ -108,6 +107,8 @@ export default function Timeline() {
               config={config}
               userId={user.id}
               key={post.id}
+              render={render}
+              setRender={setRender}
             />
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { Link, useHistory, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Container from "./Style";
+import { Container } from "./Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
@@ -22,8 +22,8 @@ export default function Hashtag() {
     },
   };
 
-  if(render[0] !== params.hashtag) {
-      setRender([params.hashtag]);
+  if (render[0] !== params.hashtag) {
+    setRender([params.hashtag]);
   }
 
   useEffect(() => {
