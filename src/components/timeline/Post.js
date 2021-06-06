@@ -7,6 +7,7 @@ import { Link, useHistory } from "react-router-dom";
 import { IconContext } from "react-icons";
 import ReactPlayer from "react-player";
 import axios from "axios";
+import styled from 'styled-components';
 
 export default function Post(props) {
   const { content } = props;
@@ -112,3 +113,29 @@ export default function Post(props) {
     </div>
   );
 }
+
+
+const previewDialogBox = styled.div`
+  width: 67%;
+  height: 88%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img {
+    height: 90%;
+    width: 95%;
+  }
+`
+
+const previewDialogHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const newTabButton = styled.div`
+  width: 138px;
+  height: 31px;
+  background: #1877F2;
+  border-radius: 5px;
+`
