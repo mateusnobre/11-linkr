@@ -6,7 +6,8 @@ import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
-import styled from 'styled-components';
+import styled from "styled-components";
+import { DebounceInput } from "react-debounce-input";
 
 export default function User() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,7 @@ export default function User() {
   const [username, setUsername] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [userId, setUserId] = useState();
+  const [usersSearched, setUsersSearched] = useState({ users: [] });
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const [hashtagSearch, setHashtagSearch] = useState("");
@@ -84,15 +86,15 @@ export default function User() {
     });
   }, render);
   useEffect(() => {
-    setIsLoadingFollow(true)
+    setIsLoadingFollow(true);
     const followedUsersRequest = axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows`,
       config
     );
     followedUsersRequest.then((response) => {
       const followedUsers = response.data.users;
-      for (let i = 0; i < followedUsers.length; i++){
-        if(followedUsers[i].id == userId){
+      for (let i = 0; i < followedUsers.length; i++) {
+        if (followedUsers[i].id == userId) {
           setIsFollowedByMe(true);
         }
       }
@@ -111,9 +113,9 @@ export default function User() {
   function showMenu() {
     isVisible ? setIsVisible(false) : setIsVisible(true);
   }
-  
+
   function followUser() {
-    setIsLoadingFollow(true)
+    setIsLoadingFollow(true);
     if (!isFollowedByMe) {
       const followRequest = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${userId}/follow`,
@@ -142,10 +144,28 @@ export default function User() {
     setIsLoadingFollow(false);
   }
 
-
   function findHashtag(event) {
     event.preventDefault();
     history.push(`/hashtag/${hashtagSearch}`);
+  }
+
+  function searchUser(userSearched) {
+    const searchConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const requestUsers = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/search?username=${userSearched}`,
+      searchConfig
+    );
+    requestUsers.then((responseUsers) => {
+      let allUsers = responseUsers.data.users;
+      let users = allUsers
+        .sort((e) => (e.isFollowingLoggedUser ? 1 : -1))
+        .reverse();
+      setUsersSearched({ users: users });
+    });
   }
 
   return (
@@ -154,6 +174,28 @@ export default function User() {
         <Link to="/">
           <h1>linkr</h1>
         </Link>
+        <div className="search">
+          <DebounceInput
+            placeholder="&#xf002;  Search for people and friends"
+            className="search-input"
+            debounceTimeout={300}
+            onChange={(e) => searchUser(e.target.value)}
+          ></DebounceInput>
+          <div className="search-users">
+            {usersSearched.users.map((user) => (
+              <div
+                className="search-user"
+                onClick={() => history.push(`/user/${user.id}`)}
+              >
+                <img src={user.avatar} alt={user.username}></img>
+                <p>
+                  {user.username}
+                  {user.isFollowingLoggedUser ? <span>• following</span> : ""}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="profile">
           <IconContext.Provider value={{ className: "react-icons" }}>
             {isVisible ? (
@@ -185,8 +227,12 @@ export default function User() {
         <div>
           <h2>{username}'s posts</h2>
         </div>
-        {!isLoadingFollow && isFollowedByMe && <Unfollow onClick={followUser}>Unfollow</Unfollow>}
-        {!isLoadingFollow && !isFollowedByMe && <Follow onClick={followUser}>Follow</Follow>}
+        {!isLoadingFollow && isFollowedByMe && (
+          <Unfollow onClick={followUser}>Unfollow</Unfollow>
+        )}
+        {!isLoadingFollow && !isFollowedByMe && (
+          <Follow onClick={followUser}>Follow</Follow>
+        )}
       </UserHeader>
       <div className="content">
         {isLoading && <Loading />}
@@ -239,11 +285,11 @@ const UserHeader = styled.div`
     margin-left: 18px;
     line-height: 50px;
   }
-`
+`;
 const Follow = styled.div`
   user-select: none;
   position: absolute;
-  background: #1877F2;
+  background: #1877f2;
   border-radius: 5px;
   width: 112px;
   height: 31px;
@@ -255,13 +301,13 @@ const Follow = styled.div`
   font-size: 14px;
   top: 69px;
   right: 0px;
-`
+`;
 
 const Unfollow = styled.div`
   user-select: none;
   position: absolute;
-  color: #1877F2;
-  background: #FFFFFF;
+  color: #1877f2;
+  background: #ffffff;
   border-radius: 5px;
   width: 112px;
   height: 31px;
@@ -273,4 +319,4 @@ const Unfollow = styled.div`
   font-size: 14px;
   top: 69px;
   right: 0px;
-`
+`;
