@@ -64,9 +64,7 @@ export default function Post(props) {
           <img src={user.avatar} alt='Avatar'></img>
         </Link>
         <IconContext.Provider value={{ className: "react-icons" }}>
-          {!isLikedByMe && (
-            <AiOutlineHeart onClick={() => likePost(setIsLikedByMe)} />
-          )}
+          {!isLikedByMe && <AiOutlineHeart onClick={likePost} />}
           {isLikedByMe && <FcLike onClick={likePost} />}
         </IconContext.Provider>
         <div
