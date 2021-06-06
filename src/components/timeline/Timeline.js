@@ -29,27 +29,39 @@ export default function Timeline() {
 
   useEffect(() => {
     setIsLoading(true);
-    const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
-      config
-    );
-
     const trendingRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
       config
     );
 
-    request.then((response) => {
-      const newArray = response.data.posts;
-      if (newArray.length === 0) {
-        alert("Nenhum post encontrado");
-      }
-      setPosts([...newArray]);
-      setIsLoading(false);
-    });
+    const followRequest = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",
+      config
+    );
 
-    request.catch((error) => {
-      alert("Houve uma falha ao obter os posts, por favor atualize a página");
+    followRequest.then((response) => {
+      if (!response.data.users.length) {
+        alert("Você não segue ninguém ainda, procure por perfis na busca");
+        setIsLoading(false);
+        return;
+      }
+      const request = axios.get(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts",
+        config
+      );
+      request.then((response) => {
+        const newArray = response.data.posts.filter(
+          (e) => e.user.id !== user.id
+        );
+        if (newArray.length === 0) {
+          alert("Nenhuma publicação encontrada");
+        }
+        setPosts([...newArray]);
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        alert("Houve uma falha ao obter os posts, por favor atualize a página");
+      });
     });
 
     trendingRequest.then((response) => {
@@ -116,21 +128,14 @@ export default function Timeline() {
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/search?username=${userSearched}`,
       searchConfig
     );
-    const requestFollows = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",
-      config
-    );
     requestUsers.then((responseUsers) => {
-      requestFollows.then((responseFollows) => {
-        let allUsers = responseUsers.data.users;
-        let follows = responseFollows.data.users;
-        let users = allUsers.sort((e) => follows.includes(e)).reverse();
-        console.log(allUsers, follows, users);
-        setUsersSearched({ users: users });
-      });
+      let allUsers = responseUsers.data.users;
+      let users = allUsers
+        .sort((e) => (e.isFollowingLoggedUser ? 1 : -1))
+        .reverse();
+      setUsersSearched({ users: users });
     });
   }
-
 
   function findHashtag(event) {
     event.preventDefault();

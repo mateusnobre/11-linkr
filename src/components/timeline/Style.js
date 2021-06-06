@@ -57,6 +57,7 @@ const Container = styled.div`
     border-radius: 0px 0px 8px 8px;
   }
   .search-user {
+    z-index: 1;
     display: flex;
     flex-flow: nowrap;
     align-items: center;
