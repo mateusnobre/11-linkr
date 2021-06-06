@@ -28,8 +28,8 @@ export default function Timeline() {
     },
   };
 
-  function loadPage() {
-    setIsLoading(true);
+  function loadPage(showLoadIcon = false) {
+    if (showLoadIcon) setIsLoading(true);
     const trendingRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
       config
@@ -74,7 +74,7 @@ export default function Timeline() {
       alert("Houve uma falha ao obter as hashtags");
     });
   }
-  useEffect(loadPage, render);
+  useEffect(() => loadPage(true), render);
   useInterval(loadPage, 15000);
 
   function logout() {

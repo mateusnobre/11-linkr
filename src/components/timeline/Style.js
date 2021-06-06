@@ -97,8 +97,10 @@ const Container = styled.div`
   .profile-picture .react-icons {
     margin-top: 20px;
     font-size: 20px;
+    cursor: pointer;
   }
-  .likes {
+  .likes,
+  .comments {
     font-family: "Lato";
     font-style: normal;
     font-weight: normal;
@@ -128,6 +130,9 @@ const Container = styled.div`
     align-items: center;
     width: 611px;
   }
+  .post-and-comments {
+    margin-bottom: 29px;
+  }
   .post {
     display: flex;
     justify-content: space-between;
@@ -135,7 +140,6 @@ const Container = styled.div`
     width: 611px;
     background: #171717;
     border-radius: 16px;
-    margin-bottom: 29px;
     position: relative;
   }
   .menu {
@@ -183,6 +187,82 @@ const Container = styled.div`
     line-height: 24px;
     color: #707070;
     margin-bottom: 10px;
+  }
+  .comments-box {
+    background-color: #1e1e1e;
+    width: 611px;
+    margin-top: -12px;
+    border-radius: 0px 0px 16px 16px;
+    padding-top: 10px;
+  }
+  .comment-user {
+    margin-top: 16px;
+    padding-bottom: 16px;
+    margin-left: calc(50% - 285px);
+    width: 570px;
+    border-bottom: 1px solid #353535;
+    display: flex;
+  }
+  .comment-user img {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    margin-right: 18px;
+  }
+  .comment-user h1 {
+    font-family: "Lato";
+    font-size: 14px;
+    color: #f3f3f3;
+    font-weight: 700;
+  }
+  .comment-user h2 {
+    font-family: "Lato";
+    font-size: 14px;
+    color: #acacac;
+    font-weight: 700;
+    margin: 0;
+    text-overflow: ellipsis;
+  }
+  .comment-user .texts {
+    width: 90%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+  }
+  .comment-user span {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #565656;
+    font-family: "Lato";
+    font-weight: 400;
+  }
+  .my-comments {
+    display: flex;
+    align-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 25px;
+    padding-right: 20px;
+    form {
+      position: relative;
+    }
+    img {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      margin-right: 18px;
+    }
+    input {
+      width: 510px;
+      height: 40px;
+      background-color: #252525;
+      border-radius: 8px;
+    }
+    .send {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
   }
   .trending {
     width: 301px;
