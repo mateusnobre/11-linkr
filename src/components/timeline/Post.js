@@ -1,19 +1,53 @@
 import React, { useState, useEffect } from "react";
 import ReactHashtag from "react-hashtag";
 import ReactTooltip from "react-tooltip";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineClose } from "react-icons/ai";
 import { FcLike } from "react-icons/fc";
 import { Link, useHistory } from "react-router-dom";
 import { IconContext } from "react-icons";
 import ReactPlayer from "react-player";
 import axios from "axios";
+import Modal from 'react-modal';
+import styled from 'styled-components';
+
+const PreviewDialogBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img{
+    height: 90%;
+    width: 95%;
+  }
+`
+const PreviewDialogHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+const NewTabButton = styled.div`
+  width: 138px;
+  height: 31px;
+  line-height: 31px;
+  text-align: center;
+  color: white;
+  font-family: Lato;
+  font-weight: bold;
+  font-size: 14px;
+  background: #1877F2;
+  border-radius: 5px;
+`
+
 
 export default function Post(props) {
+  
+
   const { content } = props;
   const { id, text, link, linkTitle, linkDescription, linkImage, user, likes } =
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
   const [likesArr, setLikesArr] = useState(likes);
   var getYouTubeID = require("get-youtube-id");
 
@@ -56,9 +90,26 @@ export default function Post(props) {
       });
     }
   }
-
+  function showPreviewDialog(){
+    setPreviewMode(true);
+  }
+  function hidePreviewDialog(){
+    setPreviewMode(false);
+  }
   return (
     <div className="post">
+        <Modal
+            isOpen={previewMode}
+            contentLabel="Preview Modal"
+          >
+          <PreviewDialogBox>
+            <PreviewDialogHeader>
+              <NewTabButton onClick={()=> {window.open(link, "_blank"); hidePreviewDialog()}}>Open in new tab</NewTabButton>
+              <AiOutlineClose onClick={hidePreviewDialog}></AiOutlineClose>
+            </PreviewDialogHeader>
+          <img src={linkImage} alt={linkTitle}/>
+          </PreviewDialogBox>
+        </Modal>
       <div className="profile-picture">
         <Link to={`/user/${user.id}`}>
           <img src={user.avatar} alt='Avatar'></img>
@@ -94,7 +145,7 @@ export default function Post(props) {
           </ReactHashtag>
         </div>
         {getYouTubeID(link) === null ? (
-          <a target="_blanck" href={link} className="link-box">
+          <a target="_blanck" onClick={showPreviewDialog} className="link-box">
             <div className="left">
               <div className="link-title">{linkTitle}</div>
               <div className="link-description">{linkDescription}</div>
