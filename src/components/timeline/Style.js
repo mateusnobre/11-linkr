@@ -4,6 +4,10 @@ const Container = styled.div`
   background-color: #333333;
   min-height: 100vh;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .header {
     display: flex;
     justify-content: space-between;
@@ -13,6 +17,7 @@ const Container = styled.div`
     width: 100%;
     height: 72px;
     background-color: #151515;
+    user-select: none;
   }
   .profile {
     display: flex;
@@ -183,6 +188,7 @@ const Container = styled.div`
     height: 406px;
     background: #171717;
     border-radius: 16px;
+    user-select: none;
   }
   .name {
     font-family: "Lato";
@@ -196,6 +202,7 @@ const Container = styled.div`
     font-family: "Passion One", cursive;
     font-size: 49px;
     color: white;
+    user-select: none;
   }
   h2 {
     font-family: "Oswald", sans-serif;
@@ -203,6 +210,7 @@ const Container = styled.div`
     width: 937px;
     word-break: keep-all;
     margin: 53px auto 43px auto;
+    user-select: none;
   }
   .text {
     font-family: "Lato";
@@ -346,6 +354,16 @@ const Container = styled.div`
     font-size: 17px;
     line-height: 31px;
     color: #b7b7b7;
+  }
+  .find-hashtag {
+    display: flex;
+    justify-content: center;
+    width: 269px;
+    height: 35px;
+    background: #252525;
+    border-radius: 8px;
+    margin-right: 16px;
+    margin-top: 15px;
   }
 `;
 

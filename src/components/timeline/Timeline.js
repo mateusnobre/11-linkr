@@ -15,6 +15,7 @@ export default function Timeline() {
   const [hashtags, setHashtags] = useState([]);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
+  const [hashtagSearch, setHashtagSearch] = useState("");
   const [render, setRender] = useState([1]);
   const [usersSearched, setUsersSearched] = useState({ users: [] });
   const token = localStorage.getItem("token");
@@ -130,7 +131,12 @@ export default function Timeline() {
     });
   }
 
-  console.log(usersSearched);
+
+  function findHashtag(event) {
+    event.preventDefault();
+    history.push(`/hashtag/${hashtagSearch}`);
+  }
+
   return (
     <Container onClick={() => setUsersSearched({ users: [] })}>
       <div className="header">
@@ -231,6 +237,15 @@ export default function Timeline() {
               <div className="hashtags">#{hashtag.name}</div>
             </Link>
           ))}
+          <form onSubmit={findHashtag}>
+            <input
+              type="text"
+              placeholder="# type a hashtag"
+              onChange={(e) => setHashtagSearch(e.target.value)}
+              value={hashtagSearch}
+              className="find-hashtag"
+            ></input>
+          </form>
         </div>
       </div>
     </Container>
