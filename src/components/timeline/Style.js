@@ -4,6 +4,10 @@ const Container = styled.div`
   background-color: #333333;
   min-height: 100vh;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .header {
     display: flex;
     justify-content: space-between;
@@ -13,6 +17,7 @@ const Container = styled.div`
     width: 100%;
     height: 72px;
     background-color: #151515;
+    user-select: none;
   }
   .profile {
     display: flex;
@@ -23,6 +28,58 @@ const Container = styled.div`
   .header .react-icons {
     font-size: 20px;
     color: white;
+  }
+  .search {
+    position: relative;
+    width: 40vw;
+    display: flex;
+    flex-flow: wrap column;
+  }
+  .search-input {
+    font-family: "FontAwesome";
+    position: absolute;
+    top: -20px;
+    width: 100%;
+    height: 45px;
+    background-color: #ffffff;
+    outline: none;
+  }
+  .search-users {
+    position: absolute;
+    top: 22px;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: hidden;
+    background-color: #e7e7e7;
+    border-radius: 0px 0px 8px 8px;
+  }
+  .search-user {
+    z-index: 1;
+    display: flex;
+    flex-flow: nowrap;
+    align-items: center;
+    height: 35px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    cursor: pointer;
+  }
+  .search-users img {
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    margin-right: 12px;
+    margin-left: 17px;
+  }
+  .search-users p {
+    width: 100%;
+    font-family: "Lato";
+    font-size: 18px;
+    color: #515151;
+  }
+  .search-user span {
+    font-family: "Lato";
+    font-size: 15px;
+    color: #c5c5c5;
   }
   .profile-picture {
     display: flex;
@@ -37,8 +94,10 @@ const Container = styled.div`
   .profile-picture .react-icons {
     margin-top: 20px;
     font-size: 20px;
+    cursor: pointer;
   }
-  .likes {
+  .likes,
+  .comments {
     font-family: "Lato";
     font-style: normal;
     font-weight: normal;
@@ -53,6 +112,9 @@ const Container = styled.div`
     margin: 0px auto;
     display: flex;
     justify-content: space-between;
+  }
+  .post-and-comments {
+    margin-bottom: 20px;
   }
   .posts {
     display: flex;
@@ -75,7 +137,6 @@ const Container = styled.div`
     width: 611px;
     background: #171717;
     border-radius: 16px;
-    margin-bottom: 29px;
     position: relative;
   }
   .menu {
@@ -124,11 +185,88 @@ const Container = styled.div`
     color: #707070;
     margin-bottom: 10px;
   }
+  .comments-box {
+    background-color: #1e1e1e;
+    width: 611px;
+    margin-top: -12px;
+    border-radius: 0px 0px 16px 16px;
+    padding-top: 10px;
+  }
+  .comment-user {
+    margin-top: 16px;
+    padding-bottom: 16px;
+    margin-left: calc(50% - 285px);
+    width: 570px;
+    border-bottom: 1px solid #353535;
+    display: flex;
+  }
+  .comment-user img {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    margin-right: 18px;
+  }
+  .comment-user h1 {
+    font-family: "Lato";
+    font-size: 14px;
+    color: #f3f3f3;
+    font-weight: 700;
+  }
+  .comment-user h2 {
+    font-family: "Lato";
+    font-size: 14px;
+    color: #acacac;
+    font-weight: 700;
+    margin: 0;
+    text-overflow: ellipsis;
+  }
+  .comment-user .texts {
+    width: 90%;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+  }
+  .comment-user span {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #565656;
+    font-family: "Lato";
+    font-weight: 400;
+  }
+  .my-comments {
+    display: flex;
+    align-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 25px;
+    padding-right: 20px;
+    form {
+      position: relative;
+    }
+    img {
+      width: 39px;
+      height: 39px;
+      border-radius: 50%;
+      margin-right: 18px;
+    }
+    input {
+      width: 510px;
+      height: 40px;
+      background-color: #252525;
+      border-radius: 8px;
+    }
+    .send {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
+  }
   .trending {
     width: 301px;
     height: 406px;
     background: #171717;
     border-radius: 16px;
+    user-select: none;
   }
   .name {
     font-family: "Lato";
@@ -142,6 +280,7 @@ const Container = styled.div`
     font-family: "Passion One", cursive;
     font-size: 49px;
     color: white;
+    user-select: none;
   }
   h2 {
     font-family: "Oswald", sans-serif;
@@ -149,6 +288,7 @@ const Container = styled.div`
     width: 937px;
     word-break: keep-all;
     margin: 53px auto 43px auto;
+    user-select: none;
   }
   .text {
     font-family: "Lato";
@@ -300,6 +440,16 @@ const Container = styled.div`
     color: red;
     font-size: 20px;
     cursor: pointer;
+  }
+  .find-hashtag {
+    display: flex;
+    justify-content: center;
+    width: 269px;
+    height: 35px;
+    background: #252525;
+    border-radius: 8px;
+    margin-right: 16px;
+    margin-top: 15px;
   }
 `;
 
