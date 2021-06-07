@@ -7,7 +7,6 @@ import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import { DebounceInput } from "react-debounce-input";
 import Post from "../timeline/Post";
-import useInterval from "react-useinterval";
 import InfiniteScroll from 'react-infinite-scroller';
 
 export default function Timeline() {
@@ -15,7 +14,7 @@ export default function Timeline() {
   const [isVisible, setIsVisible] = useState(false);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
-  const [render, setRender] = useState([1]);
+  const render = 1;
   const [pageNumber, setPageNumber] = useState(0);
   const [hashtagSearch, setHashtagSearch] = useState("");
   const [usersSearched, setUsersSearched] = useState({ users: [] });

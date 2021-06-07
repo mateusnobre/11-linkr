@@ -11,12 +11,6 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [picture, setPicture] = useState("");
-  const [loading, setLoading] = useState({
-    email: false,
-    password: false,
-    username: false,
-    picture: false,
-  });
   const [block, setBlock] = useState(false);
   const { token, setToken } = useContext(TokenContext);
   const { user, setUser } = useContext(UserContext);
