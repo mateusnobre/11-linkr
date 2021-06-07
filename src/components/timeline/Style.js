@@ -211,6 +211,7 @@ const Container = styled.div`
     font-size: 14px;
     color: #f3f3f3;
     font-weight: 700;
+    cursor: pointer;
   }
   .comment-user h2 {
     font-family: "Lato";

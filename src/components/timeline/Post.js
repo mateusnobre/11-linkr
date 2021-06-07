@@ -46,7 +46,7 @@ const NewTabButton = styled.div`
 `;
 
 export default function Post(props) {
-  const { content, config } = props;
+  const { content, config, renderMyPosts, setRenderMyPosts } = props;
   const { id, text, link, linkTitle, linkDescription, linkImage, user, likes } =
     content;
   const history = useHistory();
@@ -154,10 +154,10 @@ export default function Post(props) {
     request.then((response) => {
       setModalOpen(false);
       setIsLoading(false);
-      if (render[0] !== 2) {
-        setRender([2]);
+      if (renderMyPosts[0] !== 2) {
+        setRenderMyPosts([2]);
       } else {
-        setRender([1]);
+        setRenderMyPosts([1]);
       }
     });
     request.catch((error) => {
@@ -280,13 +280,8 @@ export default function Post(props) {
           {comments.comments.map((comment) => (
             <div className="comment-user" key={comment.id}>
               <img src={comment.user.avatar} alt={comment.user.username}></img>
-              <div
-                className="texts"
-                onClick={() => {
-                  console.log(followersID, comment.user);
-                }}
-              >
-                <h1>
+              <div className="texts">
+                <h1 onClick={() => history.push(`/user/${comment.user.id}`)}>
                   {comment.user.username}
                   <span>
                     {userLogged.id === comment.user.id ? "• post’s author" : ""}
