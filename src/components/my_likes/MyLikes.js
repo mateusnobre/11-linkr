@@ -7,15 +7,16 @@ import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import { DebounceInput } from "react-debounce-input";
 import Post from "../timeline/Post";
+import useInterval from "react-useinterval";
+import InfiniteScroll from 'react-infinite-scroller';
+
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isEnable, setIsEnable] = useState(true);
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
-  const [url, setUrl] = useState("");
-  const [description, setDescription] = useState("");
   const [render, setRender] = useState([1]);
+  const [pageNumber, setPageNumber] = useState(0);
   const [hashtagSearch, setHashtagSearch] = useState("");
   const [usersSearched, setUsersSearched] = useState({ users: [] });
   const token = localStorage.getItem("token");
@@ -27,31 +28,12 @@ export default function Timeline() {
     },
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    const request = axios.get(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked`,
-      config
-    );
-
+  function loadPage(showLoadIcon = false) {
+    if (showLoadIcon) setIsLoading(true);
     const trendingRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
       config
     );
-
-    request.then((response) => {
-      const newArray = response.data.posts;
-      if (newArray.length === 0) {
-        alert("Nenhum post encontrado");
-      }
-      setPosts([...newArray]);
-      setIsLoading(false);
-    });
-
-    request.catch((error) => {
-      alert("Houve uma falha ao obter os posts, por favor atualize a página");
-    });
-
     trendingRequest.then((response) => {
       const newArray = response.data.hashtags;
       setHashtags([...newArray]);
@@ -60,8 +42,29 @@ export default function Timeline() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
-  }, render);
-
+    loadPosts();
+  }
+  useEffect(() => loadPage(true), render);
+  function loadPosts() {
+    console.log('entrei')
+    setIsLoading(true)
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/liked?offset=${5*pageNumber}`,
+      config
+    );
+    request.then((response) => {
+      const newArray = posts.concat(response.data.posts);
+      if (newArray.length === 0) {
+        alert("Nenhum post encontrado");
+      }
+      setPosts([...newArray]);
+      setIsLoading(false);
+      setPageNumber(pageNumber+1);
+    });
+    request.catch((error) => {
+      alert("Houve uma falha ao obter os posts, por favor atualize a página");
+    });
+  }
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -152,14 +155,21 @@ export default function Timeline() {
       <div className="content">
         {isLoading && <Loading />}
         <div className="my-posts">
-          {posts.map((post) => (
-            <Post
-              content={post}
-              config={config}
-              userId={user.id}
-              key={post.id}
-            />
-          ))}
+          <InfiniteScroll
+              pageStart={0}
+              hasMore={true}
+              loadMore={loadPosts}
+              loader={<Loading></Loading>}
+          >
+            {posts.map((post) => (
+              <Post
+                content={post}
+                config={config}
+                userId={user.id}
+                key={post.id}
+              />
+            ))}
+          </InfiniteScroll>
         </div>
         <div className="trending">
           <div className="trending-title">trending</div>

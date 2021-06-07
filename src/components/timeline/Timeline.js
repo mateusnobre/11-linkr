@@ -8,6 +8,8 @@ import Loading from "../Loading";
 import Post from "./Post";
 import { DebounceInput } from "react-debounce-input";
 import useInterval from "react-useinterval";
+import InfiniteScroll from 'react-infinite-scroller';
+
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -18,6 +20,7 @@ export default function Timeline() {
   const [description, setDescription] = useState("");
   const [hashtagSearch, setHashtagSearch] = useState("");
   const [render, setRender] = useState([1]);
+  const [pageNumber, setPageNumber] = useState(0);
   const [usersSearched, setUsersSearched] = useState({ users: [] });
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -34,7 +37,14 @@ export default function Timeline() {
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/hashtags/trending",
       config
     );
+    trendingRequest.then((response) => {
+      const newArray = response.data.hashtags;
+      setHashtags([...newArray]);
+    });
 
+    trendingRequest.catch((error) => {
+      alert("Houve uma falha ao obter as hashtags");
+    });
     const followRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",
       config
@@ -47,36 +57,61 @@ export default function Timeline() {
         return;
       }
       const request = axios.get(
-        "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts",
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts`,
         config
       );
       request.then((response) => {
+        setPageNumber(pageNumber+1);
         const newArray = response.data.posts.filter(
           (e) => e.user.id !== user.id
         );
         if (newArray.length === 0) {
           alert("Nenhuma publicação encontrada");
         }
-        setPosts([...newArray]);
+        setPosts(posts.concat([...newArray]));
         setIsLoading(false);
       });
       request.catch((error) => {
         alert("Houve uma falha ao obter os posts, por favor atualize a página");
       });
     });
-
-    trendingRequest.then((response) => {
-      const newArray = response.data.hashtags;
-      setHashtags([...newArray]);
-    });
-
-    trendingRequest.catch((error) => {
-      alert("Houve uma falha ao obter as hashtags");
-    });
   }
   useEffect(() => loadPage(true), render);
   useInterval(loadPage, 15000);
 
+  function loadPosts() {
+    setIsLoading(true)
+    const followRequest = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",
+      config
+    );
+
+    followRequest.then((response) => {
+      if (!response.data.users.length) {
+        alert("Você não segue ninguém ainda, procure por perfis na busca");
+        setIsLoading(false);
+        return;
+      }
+      const request = axios.get(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts?offset=${10*pageNumber}`,
+        config
+      );
+      request.then((response) => {
+        setPageNumber(pageNumber+1);
+        const newArray = response.data.posts.filter(
+          (e) => e.user.id !== user.id
+        );
+        if (newArray.length === 0) {
+          alert("Nenhuma publicação encontrada");
+        }
+        setPosts(posts.concat([...newArray]));
+        setIsLoading(false);
+      });
+      request.catch((error) => {
+        alert("Houve uma falha ao obter os posts, por favor atualize a página");
+      });
+    });
+  }
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -228,16 +263,21 @@ export default function Timeline() {
               </form>
             </div>
           </div>
-          {posts.map((post) => (
-            <Post
-              content={post}
-              config={config}
-              userId={user.id}
-              key={post.id}
-              render={render}
-              setRender={setRender}
-            />
-          ))}
+          <InfiniteScroll
+              pageStart={0}
+              loadMore={loadPosts}
+              hasMore={true}
+              loader={<Loading></Loading>}
+          >
+            {posts.map((post) => (
+              <Post
+                content={post}
+                config={config}
+                userId={user.id}
+                key={post.id}
+              />
+            ))}
+          </InfiniteScroll>
         </div>
         <div className="trending">
           <div className="trending-title">trending</div>
