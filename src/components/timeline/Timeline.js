@@ -220,10 +220,10 @@ export default function Timeline() {
         </div>
       </div>
       <div className={isVisible ? "menu" : "menu hidden"}>
-        <Link to="my-posts" className="logout">
+        <Link to={"/my-posts"}>
           My posts
         </Link>
-        <Link to="my-likes" className="logout">
+        <Link to={"/my-likes"}>
           My likes
         </Link>
         <div className="logout" onClick={logout}>

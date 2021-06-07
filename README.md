@@ -6,7 +6,7 @@ You can check it out at: https://11-linkr.vercel.app/
  
 
 ## Main Screen
-![image](./public/assets/img/preview.png)
+![image](./public/images/preview.png)
 
 ## Login Screen
-![image](./public/assets/img/preview_login.png)
+![image](./public/images/preview_login.png)

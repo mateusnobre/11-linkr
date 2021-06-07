@@ -36,13 +36,17 @@ const Container = styled.div`
     flex-flow: wrap column;
   }
   .search-input {
-    font-family: "FontAwesome";
     position: absolute;
     top: -20px;
     width: 100%;
     height: 45px;
     background-color: #ffffff;
     outline: none;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 19px;
+    line-height: 23px;
   }
   .search-users {
     position: absolute;
