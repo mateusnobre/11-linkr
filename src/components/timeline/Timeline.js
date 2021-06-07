@@ -3,18 +3,50 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Container from "./Style";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { FiMapPin } from "react-icons/fi";
 import { IconContext } from "react-icons";
 import Loading from "../Loading";
 import Post from "./Post";
 import { DebounceInput } from "react-debounce-input";
 import useInterval from "react-useinterval";
 import InfiniteScroll from 'react-infinite-scroller';
+import styled from 'styled-components';
 
+const EnabledGPS = styled.div`
+  position: relative;
+  bottom: 24px;
+  width: 133px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  color: #238700;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 16px;
+`
+const DisabledGPS = styled.div`
+  position: relative;
+  bottom: 24px;
+  width: 153px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  color: #949494;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 16px;
+`
 export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isEnable, setIsEnable] = useState(true);
+  const [enabledGPS, setEnabledGPS] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [gps, setGPS] = useState([0,0]);
   const [hashtags, setHashtags] = useState([]);
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -131,8 +163,14 @@ export default function Timeline() {
     }
 
     setIsEnable(false);
-
-    const body = { text: description, link: url };
+    var body = null;
+    if (enabledGPS) {
+      body = { text: description, link: url , geolocation: {latitude: gps[0], longitude: gps[1]}};
+      setEnabledGPS(false);
+    }
+    else {
+      body = { text: description, link: url};
+    }
     const request = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
       body,
@@ -179,7 +217,22 @@ export default function Timeline() {
     event.preventDefault();
     history.push(`/hashtag/${hashtagSearch}`);
   }
-
+  function setLocation(position) {
+    setGPS([...position.coords.latitude, position.coords.longitude])
+  }
+  function getLocation() {
+    if (!enabledGPS){
+      if (navigator.geolocation) {
+        setEnabledGPS(true);
+        navigator.geolocation.getCurrentPosition(setLocation);
+      } else {
+        alert('Geolocation disabled');
+      }
+    }
+    else {
+      setEnabledGPS(false)
+    }
+  }
   return (
     <Container onClick={() => setUsersSearched({ users: [] })}>
       <div className="header">
@@ -261,6 +314,8 @@ export default function Timeline() {
                   {isEnable ? "Publicar" : "Publicando..."}
                 </button>
               </form>
+              {enabledGPS && <EnabledGPS onClick={getLocation}><FiMapPin/>Localização ativada</EnabledGPS>}
+              {!enabledGPS && <DisabledGPS onClick={getLocation}><FiMapPin/>Localização desativada</DisabledGPS>}
             </div>
           </div>
           <InfiniteScroll

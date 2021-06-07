@@ -8,6 +8,7 @@ import {
   AiOutlineClose,
   AiOutlineComment,
 } from "react-icons/ai";
+import { FaMapMarkerAlt} from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { BiRepost } from "react-icons/bi";
@@ -17,6 +18,7 @@ import ReactPlayer from "react-player";
 import axios from "axios";
 import Loading from "../Loading";
 import styled from "styled-components";
+import GoogleMapReact from 'google-map-react';
 
 const PreviewDialogBox = styled.div`
   display: flex;
@@ -45,10 +47,32 @@ const NewTabButton = styled.div`
   background: #1877f2;
   border-radius: 5px;
 `;
+const MapModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 790px;
+  height: 354px;
+  background: #333333;
+  border-radius: 20px;
+`
+const MapBox = styled.div`
+  width: 713px;
+  height: 240px;
+`
+const MapTitle = styled.div`
+  font-family: Oswald;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 38px;
+  line-height: 56px;
+  color: white;
+`
 
 export default function Post(props) {
   const { content, config, renderMyPosts, setRenderMyPosts } = props;
-  const { id, text, link, linkTitle, linkDescription, linkImage, user, likes } =
+  const { id, text, link, linkTitle, linkDescription, linkImage, user, likes , geolocation} =
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
@@ -56,6 +80,7 @@ export default function Post(props) {
   const [likesArr, setLikesArr] = useState(likes);
   const [modalDeleteIsOpen, setModalDeleteOpen] = useState(false);
   const [modalShareIsOpen, setModalShareOpen] = useState(false);
+  const [modalGPS, setModalGPS] = useState(false);
   const [returnButtonEnable, setReturnButtonEnable] = useState(true);
   const [confirmButtonEnable, setConfirmButtonEnable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -215,6 +240,17 @@ export default function Post(props) {
             <img src={linkImage} alt={linkTitle} />
           </PreviewDialogBox>
         </Modal>
+        <Modal isOpen={modalGPS} contentLabel='GPS Modal'>
+          <div style={{ height: '100vh', width: '100%' }}>
+            <GoogleMapReact>
+              <MapModal lat={typeof geolocation !== 'undefined' ? geolocation.latitude : 0} lng={typeof geolocation !== 'undefined' ? geolocation.longitude : 0}>
+                <MapTitle>{user.username}'s location</MapTitle>
+                <MapBox></MapBox>
+              </MapModal>
+            </GoogleMapReact>
+          </div>
+        </Modal>
+        
         <div className="profile-picture">
           <Link to={`/user/${user.id}`}>
             <img src={user.avatar} alt="Avatar"></img>
@@ -264,6 +300,7 @@ export default function Post(props) {
           <Link to={`/user/${user.id}`} className="name">
             {user.username}
           </Link>
+          <FaMapMarkerAlt onClick={setModalGPS(true)}/>
           <div className="text">
             <ReactHashtag onHashtagClick={(val) => hashtagClick(val)}>
               {text}

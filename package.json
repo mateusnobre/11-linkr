@@ -7,6 +7,7 @@
     "dayjs": "^1.10.5",
     "g": "^2.0.1",
     "get-youtube-id": "^1.0.1",
+    "google-map-react": "^2.1.9",
     "react": "^16.14.0",
     "react-debounce-input": "^3.2.3",
     "react-dom": "^16.14.0",
