@@ -15,7 +15,8 @@ export default function Timeline() {
   const [posts, setPosts] = useState([]);
   const [hashtags, setHashtags] = useState([]);
   const [usersSearched, setUsersSearched] = useState({ users: [] });
-  const render = 1;
+  const [render, setRender] = useState([1]);
+  const [hasMore, setHasMore] = useState(true);
   const [pageNumber, setPageNumber] = useState(0);
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -41,11 +42,22 @@ export default function Timeline() {
     trendingRequest.catch((error) => {
       alert("Houve uma falha ao obter as hashtags");
     });
-    loadPosts();
+    const request = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts`,
+      config
+    );
+    request.then((response) => {
+      const newArray = response.data.posts;
+      setPosts(posts.concat([...newArray]));
+      setIsLoading(false);
+      setPageNumber(pageNumber+1);
+    });
+    request.catch((error) => {
+      alert("Houve uma falha ao obter os posts, por favor atualize a página");
+    });
   }
-  useEffect(() => loadPage(true), render);
+  useEffect(() => loadPage(true), []);
   function loadPosts() {
-    setIsLoading(true)
     const request = axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/${user.id}/posts?offset=${5*pageNumber}`,
       config
@@ -53,10 +65,10 @@ export default function Timeline() {
     request.then((response) => {
       const newArray = response.data.posts;
       if (newArray.length === 0) {
-        alert("Nenhum post encontrado");
+        setHasMore(false);
       }
+      console.log(newArray);
       setPosts(posts.concat([...newArray]));
-      setIsLoading(false);
       setPageNumber(pageNumber+1);
     });
     request.catch((error) => {
@@ -156,7 +168,7 @@ export default function Timeline() {
           <InfiniteScroll
               pageStart={0}
               loadMore={loadPosts}
-              hasMore={true}
+              hasMore={hasMore}
               loader={<Loading></Loading>}
           >
             {posts.map((post) => (

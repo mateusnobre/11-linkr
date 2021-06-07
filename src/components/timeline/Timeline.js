@@ -15,7 +15,7 @@ import styled from 'styled-components';
 const EnabledGPS = styled.div`
   position: relative;
   bottom: 24px;
-  width: 133px;
+  width: 130px;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -166,17 +166,16 @@ export default function Timeline() {
     var body = null;
     if (enabledGPS) {
       body = { text: description, link: url , geolocation: {latitude: gps[0], longitude: gps[1]}};
-      setEnabledGPS(false);
     }
     else {
       body = { text: description, link: url};
     }
+    console.log(body);
     const request = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
       body,
       config
     );
-
     request.then((response) => {
       if (render[0] !== 2) {
         setRender([2]);
@@ -186,6 +185,7 @@ export default function Timeline() {
       setUrl("");
       setDescription("");
       setIsEnable(true);
+      setEnabledGPS(false);
     });
 
     request.catch((error) => {
@@ -218,7 +218,7 @@ export default function Timeline() {
     history.push(`/hashtag/${hashtagSearch}`);
   }
   function setLocation(position) {
-    setGPS([...position.coords.latitude, position.coords.longitude])
+    setGPS([...[position.coords.latitude, position.coords.longitude]])
   }
   function getLocation() {
     if (!enabledGPS){

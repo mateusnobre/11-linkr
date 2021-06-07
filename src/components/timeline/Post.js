@@ -61,6 +61,10 @@ const MapBox = styled.div`
   width: 713px;
   height: 240px;
 `
+const MapHeader = styled.div`
+  display: flex;
+  width: 713px;
+`
 const MapTitle = styled.div`
   font-family: Oswald;
   font-style: normal;
@@ -89,7 +93,6 @@ export default function Post(props) {
   const [userComment, setUserComment] = useState("");
   const [followersID, setFollowersID] = useState([]);
   const [render, setRender] = useState([true]);
-  const token = localStorage.getItem("token");
   const userLogged = JSON.parse(localStorage.getItem("user"));
   var getYouTubeID = require("get-youtube-id");
 
@@ -150,7 +153,13 @@ export default function Post(props) {
   function hidePreviewDialog() {
     setPreviewMode(false);
   }
-
+  function showModalGPS() {
+    setModalGPS(true);
+  }
+  function hideModalGPS() {
+    setModalGPS(false);
+  }
+  
   function commentPost(event) {
     event.preventDefault();
     let data = {
@@ -244,7 +253,10 @@ export default function Post(props) {
           <div style={{ height: '100vh', width: '100%' }}>
             <GoogleMapReact>
               <MapModal lat={typeof geolocation !== 'undefined' ? geolocation.latitude : 0} lng={typeof geolocation !== 'undefined' ? geolocation.longitude : 0}>
-                <MapTitle>{user.username}'s location</MapTitle>
+                <MapHeader>
+                  <MapTitle>{user.username}'s location</MapTitle>
+                  <AiOutlineClose onClick={hideModalGPS}></AiOutlineClose>
+                </MapHeader>
                 <MapBox></MapBox>
               </MapModal>
             </GoogleMapReact>
@@ -300,7 +312,7 @@ export default function Post(props) {
           <Link to={`/user/${user.id}`} className="name">
             {user.username}
           </Link>
-          <FaMapMarkerAlt onClick={setModalGPS(true)}/>
+          {typeof geolocation !== 'undefined' && <FaMapMarkerAlt style={{marginLeft: '8px'}} onClick={showModalGPS}/>}
           <div className="text">
             <ReactHashtag onHashtagClick={(val) => hashtagClick(val)}>
               {text}
@@ -338,8 +350,14 @@ export default function Post(props) {
           Do you want to <br />
           delete this post?
         </ModalText>
-        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
-        <ModalConfirm onClick={deletePost}>Yes, delete</ModalConfirm>
+        <ModalButtons>
+          <Button>
+            <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+          </Button>
+          <Button>
+            <ModalConfirm onClick={deletePost}>Yes, delete</ModalConfirm>
+          </Button>
+        </ModalButtons>
         {isLoading && <Loading />}
       </Modal>
       <Modal
@@ -351,8 +369,14 @@ export default function Post(props) {
           Do you want to re-post <br />
           this link?
         </ModalText>
-        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
-        <ModalConfirm onClick={sharePost}>Yes, share</ModalConfirm>
+        <ModalButtons>
+          <Button>
+            <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+          </Button>
+          <Button>
+            <ModalConfirm onClick={sharePost}>Yes, share</ModalConfirm>
+          </Button>
+        </ModalButtons>
         {isLoading && <Loading />}
       </Modal>
       {commentsEnable ? (
@@ -410,34 +434,50 @@ const modalStyle = {
   },
 };
 
-const ModalText = styled.h1`
+const Button = styled.div`
+  display: flex;
+`
+const ModalButtons = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 295px;
+  align-items: center;
+  margin-top: 40px;
+  justify-content: space-between;
+`
+const ModalText = styled.div`
   color: #ffffff;
   font-family: "Lato";
   font-size: 30px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 7.5%;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 34px;
+  line-height: 41px;
 `;
 const ModalReturn = styled.button`
   width: 134px;
   height: 40px;
   border-radius: 5px;
-  margin-top: 60px;
   border: none;
   background-color: white;
   color: #1877f2;
-  margin-left: 150px;
   font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
   cursor: pointer;
 `;
 const ModalConfirm = styled.button`
   width: 134px;
   height: 40px;
   border-radius: 5px;
-  margin-top: 40px;
   border: none;
   background-color: #1877f2;
   color: white;
-  margin-left: 40px;
   font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
   cursor: pointer;
 `;
