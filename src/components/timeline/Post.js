@@ -8,6 +8,7 @@ import {
   AiOutlineClose,
   AiOutlineComment,
 } from "react-icons/ai";
+import { FaMapMarkerAlt} from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { BiRepost } from "react-icons/bi";
@@ -17,6 +18,7 @@ import ReactPlayer from "react-player";
 import axios from "axios";
 import Loading from "../Loading";
 import styled from "styled-components";
+import GoogleMapReact from 'google-map-react';
 
 const PreviewDialogBox = styled.div`
   display: flex;
@@ -45,10 +47,38 @@ const NewTabButton = styled.div`
   background: #1877f2;
   border-radius: 5px;
 `;
+const MapModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 790px;
+  height: 354px;
+  background: #333333;
+  border-radius: 20px;
+`
+const MapBox = styled.div`
+  width: 713px;
+  height: 240px;
+`
+const MapHeader = styled.div`
+  display: flex;
+  width: 713px;
+  justify-content: space-between;
+  align-items: center;
+`
+const MapTitle = styled.div`
+  font-family: Oswald;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 38px;
+  line-height: 56px;
+  color: white;
+`
 
 export default function Post(props) {
   const { content, config, renderMyPosts, setRenderMyPosts } = props;
-  const { id, text, link, linkTitle, linkDescription, linkImage, user, likes } =
+  const { id, text, link, linkTitle, linkDescription, linkImage, user, likes , geolocation} =
     content;
   const history = useHistory();
   var [isLikedByMe, setIsLikedByMe] = useState(false);
@@ -56,6 +86,7 @@ export default function Post(props) {
   const [likesArr, setLikesArr] = useState(likes);
   const [modalDeleteIsOpen, setModalDeleteOpen] = useState(false);
   const [modalShareIsOpen, setModalShareOpen] = useState(false);
+  const [modalGPS, setModalGPS] = useState(false);
   const [returnButtonEnable, setReturnButtonEnable] = useState(true);
   const [confirmButtonEnable, setConfirmButtonEnable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +95,6 @@ export default function Post(props) {
   const [userComment, setUserComment] = useState("");
   const [followersID, setFollowersID] = useState([]);
   const [render, setRender] = useState([true]);
-  const token = localStorage.getItem("token");
   const userLogged = JSON.parse(localStorage.getItem("user"));
   var getYouTubeID = require("get-youtube-id");
 
@@ -125,7 +155,13 @@ export default function Post(props) {
   function hidePreviewDialog() {
     setPreviewMode(false);
   }
-
+  function showModalGPS() {
+    setModalGPS(true);
+  }
+  function hideModalGPS() {
+    setModalGPS(false);
+  }
+  
   function commentPost(event) {
     event.preventDefault();
     let data = {
@@ -137,7 +173,6 @@ export default function Post(props) {
       data,
       config
     );
-    console.log(comments);
     request.then((response) => {
       setRender([!render[0]]);
     });
@@ -215,6 +250,28 @@ export default function Post(props) {
             <img src={linkImage} alt={linkTitle} />
           </PreviewDialogBox>
         </Modal>
+        {(typeof geolocation !== 'undefined') && <Modal style={modalMapStyle} isOpen={modalGPS} contentLabel='GPS Modal'>
+          <MapModal>
+            <MapHeader>
+              <MapTitle>{user.username}'s location</MapTitle>
+              <AiOutlineClose onClick={hideModalGPS}></AiOutlineClose>
+            </MapHeader>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: 'AIzaSyCBUO2_UcihiVtVDVOdaPgkXjzAWPrXm9c' }}
+              defaultZoom={8}
+              defaultCenter={{
+                lat: -23.5505,
+                lng: -46.6333
+              }}
+            >
+              <MapBox
+                lat={geolocation.latitude}
+                lng={geolocation.longitude}
+              />
+            </GoogleMapReact>
+          </MapModal>
+        </Modal>
+        }
         <div className="profile-picture">
           <Link to={`/user/${user.id}`}>
             <img src={user.avatar} alt="Avatar"></img>
@@ -264,6 +321,7 @@ export default function Post(props) {
           <Link to={`/user/${user.id}`} className="name">
             {user.username}
           </Link>
+          {typeof geolocation !== 'undefined' && <FaMapMarkerAlt style={{marginLeft: '8px'}} onClick={showModalGPS}/>}
           <div className="text">
             <ReactHashtag onHashtagClick={(val) => hashtagClick(val)}>
               {text}
@@ -301,8 +359,14 @@ export default function Post(props) {
           Do you want to <br />
           delete this post?
         </ModalText>
-        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
-        <ModalConfirm onClick={deletePost}>Yes, delete</ModalConfirm>
+        <ModalButtons>
+          <Button>
+            <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+          </Button>
+          <Button>
+            <ModalConfirm onClick={deletePost}>Yes, delete</ModalConfirm>
+          </Button>
+        </ModalButtons>
         {isLoading && <Loading />}
       </Modal>
       <Modal
@@ -314,8 +378,14 @@ export default function Post(props) {
           Do you want to re-post <br />
           this link?
         </ModalText>
-        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
-        <ModalConfirm onClick={sharePost}>Yes, share</ModalConfirm>
+        <ModalButtons>
+          <Button>
+            <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+          </Button>
+          <Button>
+            <ModalConfirm onClick={sharePost}>Yes, share</ModalConfirm>
+          </Button>
+        </ModalButtons>
         {isLoading && <Loading />}
       </Modal>
       {commentsEnable ? (
@@ -372,35 +442,64 @@ const modalStyle = {
     color: "white",
   },
 };
+const modalMapStyle = {
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    top: '25%',
+    left: '25%',
+    width: '815px',
+    height: '354px',
+    background: "#333333",
+    borderRadius: "50px",
+    color: "white",
+  },
+};
 
-const ModalText = styled.h1`
+const Button = styled.div`
+  display: flex;
+`
+const ModalButtons = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 295px;
+  align-items: center;
+  margin-top: 40px;
+  justify-content: space-between;
+`
+const ModalText = styled.div`
   color: #ffffff;
   font-family: "Lato";
   font-size: 30px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 7.5%;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 34px;
+  line-height: 41px;
 `;
 const ModalReturn = styled.button`
   width: 134px;
   height: 40px;
   border-radius: 5px;
-  margin-top: 60px;
   border: none;
   background-color: white;
   color: #1877f2;
-  margin-left: 150px;
   font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
   cursor: pointer;
 `;
 const ModalConfirm = styled.button`
   width: 134px;
   height: 40px;
   border-radius: 5px;
-  margin-top: 40px;
   border: none;
   background-color: #1877f2;
   color: white;
-  margin-left: 40px;
   font-family: "Lato";
+  font-style: normal;
+  font-weight: bold;
   cursor: pointer;
 `;
