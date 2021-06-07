@@ -51,7 +51,7 @@ const MapModal = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 790px;
   height: 354px;
   background: #333333;
@@ -64,6 +64,8 @@ const MapBox = styled.div`
 const MapHeader = styled.div`
   display: flex;
   width: 713px;
+  justify-content: space-between;
+  align-items: center;
 `
 const MapTitle = styled.div`
   font-family: Oswald;
@@ -171,7 +173,6 @@ export default function Post(props) {
       data,
       config
     );
-    console.log(comments);
     request.then((response) => {
       setRender([!render[0]]);
     });
@@ -249,20 +250,28 @@ export default function Post(props) {
             <img src={linkImage} alt={linkTitle} />
           </PreviewDialogBox>
         </Modal>
-        <Modal isOpen={modalGPS} contentLabel='GPS Modal'>
-          <div style={{ height: '100vh', width: '100%' }}>
-            <GoogleMapReact>
-              <MapModal lat={typeof geolocation !== 'undefined' ? geolocation.latitude : 0} lng={typeof geolocation !== 'undefined' ? geolocation.longitude : 0}>
-                <MapHeader>
-                  <MapTitle>{user.username}'s location</MapTitle>
-                  <AiOutlineClose onClick={hideModalGPS}></AiOutlineClose>
-                </MapHeader>
-                <MapBox></MapBox>
-              </MapModal>
+        {(typeof geolocation !== 'undefined') && <Modal style={modalMapStyle} isOpen={modalGPS} contentLabel='GPS Modal'>
+          <MapModal>
+            <MapHeader>
+              <MapTitle>{user.username}'s location</MapTitle>
+              <AiOutlineClose onClick={hideModalGPS}></AiOutlineClose>
+            </MapHeader>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: 'AIzaSyCBUO2_UcihiVtVDVOdaPgkXjzAWPrXm9c' }}
+              defaultZoom={8}
+              defaultCenter={{
+                lat: -23.5505,
+                lng: -46.6333
+              }}
+            >
+              <MapBox
+                lat={geolocation.latitude}
+                lng={geolocation.longitude}
+              />
             </GoogleMapReact>
-          </div>
+          </MapModal>
         </Modal>
-        
+        }
         <div className="profile-picture">
           <Link to={`/user/${user.id}`}>
             <img src={user.avatar} alt="Avatar"></img>
@@ -428,6 +437,19 @@ const modalStyle = {
     left: "25%",
     right: "25%",
     bottom: "25%",
+    background: "#333333",
+    borderRadius: "50px",
+    color: "white",
+  },
+};
+const modalMapStyle = {
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    top: '25%',
+    left: '25%',
+    width: '815px',
+    height: '354px',
     background: "#333333",
     borderRadius: "50px",
     color: "white",

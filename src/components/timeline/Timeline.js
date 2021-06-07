@@ -170,7 +170,6 @@ export default function Timeline() {
     else {
       body = { text: description, link: url};
     }
-    console.log(body);
     const request = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts",
       body,

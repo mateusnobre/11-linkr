@@ -67,7 +67,6 @@ export default function Timeline() {
       if (newArray.length === 0) {
         setHasMore(false);
       }
-      console.log(newArray);
       setPosts(posts.concat([...newArray]));
       setPageNumber(pageNumber+1);
     });
