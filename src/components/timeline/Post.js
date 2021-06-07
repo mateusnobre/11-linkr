@@ -10,6 +10,7 @@ import {
 } from "react-icons/ai";
 import { FcLike } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
+import { BiRepost } from "react-icons/bi";
 import { Link, useHistory } from "react-router-dom";
 import { IconContext } from "react-icons";
 import ReactPlayer from "react-player";
@@ -53,9 +54,10 @@ export default function Post(props) {
   var [isLikedByMe, setIsLikedByMe] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [likesArr, setLikesArr] = useState(likes);
-  const [modalIsOpen, setModalOpen] = useState(false);
+  const [modalDeleteIsOpen, setModalDeleteOpen] = useState(false);
+  const [modalShareIsOpen, setModalShareOpen] = useState(false);
   const [returnButtonEnable, setReturnButtonEnable] = useState(true);
-  const [deleteButtonEnable, setDeleteButtonEnable] = useState(true);
+  const [confirmButtonEnable, setConfirmButtonEnable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [comments, setComments] = useState({ comments: [] });
   const [commentsEnable, setCommentsEnable] = useState(false);
@@ -146,13 +148,14 @@ export default function Post(props) {
   }
 
   function deletePost() {
-    if (!deleteButtonEnable) return;
-    setDeleteButtonEnable(true);
+    if (!confirmButtonEnable) return;
+    setConfirmButtonEnable(false);
+    setReturnButtonEnable(false);
     setIsLoading(true);
     const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}`;
     const request = axios.delete(url, props.config);
     request.then((response) => {
-      setModalOpen(false);
+      setModalDeleteOpen(false);
       setIsLoading(false);
       if (renderMyPosts[0] !== 2) {
         setRenderMyPosts([2]);
@@ -161,15 +164,36 @@ export default function Post(props) {
       }
     });
     request.catch((error) => {
-      setModalOpen(false);
+      setModalDeleteOpen(false);
       setIsLoading(false);
       alert("Não foi possível excluir o post");
     });
   }
 
+  function sharePost() {
+    if (!confirmButtonEnable) return;
+    setConfirmButtonEnable(false);
+    setReturnButtonEnable(false);
+    setIsLoading(true);
+    const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/posts/${id}/share`;
+    const request = axios.post(url, null, props.config);
+    request.then((response) => {
+      setModalShareOpen(false);
+      setIsLoading(false);
+    });
+    request.catch((error) => {
+      setModalShareOpen(false);
+      setIsLoading(false);
+      setConfirmButtonEnable(false);
+      setReturnButtonEnable(false);
+      alert("Não foi possível repostar o post");
+    });
+  }
+
   function returnButton() {
     if (!returnButtonEnable) return;
-    setModalOpen(false);
+    setModalDeleteOpen(false);
+    setModalShareOpen(false);
   }
 
   return (
@@ -222,11 +246,17 @@ export default function Post(props) {
             </IconContext.Provider>
           </div>
           <p className="comments">{comments.comments.length} comments</p>
+          <div onClick={() => setModalShareOpen(true)}>
+            <IconContext.Provider value={{ className: "react-icons" }}>
+              <BiRepost />
+            </IconContext.Provider>
+          </div>
+          <p className="comments">{content.repostCount} re-posts</p>
         </div>
         <div className="right">
           {userLogged.id === user.id ? (
             <IconContext.Provider value={{ className: "delete" }}>
-              <HiTrash onClick={() => setModalOpen(true)}></HiTrash>
+              <HiTrash onClick={() => setModalDeleteOpen(true)}></HiTrash>
             </IconContext.Provider>
           ) : (
             ""
@@ -263,16 +293,29 @@ export default function Post(props) {
         </div>
       </div>
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalOpen(false)}
+        isOpen={modalDeleteIsOpen}
+        onRequestClose={() => setModalDeleteOpen(false)}
         style={modalStyle}
       >
         <ModalText>
-          Tem certeza que deseja <br />
-          excluir essa publicaçao
+          Do you want to <br />
+          delete this post?
         </ModalText>
-        <ModalReturn onClick={returnButton}>Não, voltar</ModalReturn>
-        <ModalConfirm onClick={deletePost}>Sim, excluir</ModalConfirm>
+        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+        <ModalConfirm onClick={deletePost}>Yes, delete</ModalConfirm>
+        {isLoading && <Loading />}
+      </Modal>
+      <Modal
+        isOpen={modalShareIsOpen}
+        onRequestClose={() => setModalShareOpen(false)}
+        style={modalStyle}
+      >
+        <ModalText>
+          Do you want to re-post <br />
+          this link?
+        </ModalText>
+        <ModalReturn onClick={returnButton}>No, cancel</ModalReturn>
+        <ModalConfirm onClick={sharePost}>Yes, share</ModalConfirm>
         {isLoading && <Loading />}
       </Modal>
       {commentsEnable ? (
@@ -347,6 +390,7 @@ const ModalReturn = styled.button`
   color: #1877f2;
   margin-left: 150px;
   font-family: "Lato";
+  cursor: pointer;
 `;
 const ModalConfirm = styled.button`
   width: 134px;
@@ -358,4 +402,5 @@ const ModalConfirm = styled.button`
   color: white;
   margin-left: 40px;
   font-family: "Lato";
+  cursor: pointer;
 `;
