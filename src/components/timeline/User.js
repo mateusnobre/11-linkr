@@ -94,7 +94,7 @@ export default function User() {
     followedUsersRequest.then((response) => {
       const followedUsers = response.data.users;
       for (let i = 0; i < followedUsers.length; i++) {
-        if (followedUsers[i].id == userId) {
+        if (followedUsers[i].id === userId) {
           setIsFollowedByMe(true);
         }
       }

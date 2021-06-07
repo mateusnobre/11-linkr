@@ -158,6 +158,8 @@ export default function Timeline() {
               config={config}
               userId={user.id}
               key={post.id}
+              renderMyPosts={render}
+              setRenderMyPosts={setRender}
             />
           ))}
         </div>

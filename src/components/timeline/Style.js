@@ -34,8 +34,6 @@ const Container = styled.div`
     width: 40vw;
     display: flex;
     flex-flow: wrap column;
-    /* overflow-y: hidden;   */
-    /* background-color: salmon; */
   }
   .search-input {
     font-family: "FontAwesome";
@@ -45,7 +43,6 @@ const Container = styled.div`
     height: 45px;
     background-color: #ffffff;
     outline: none;
-    /* border-radius: 8px 8px 0px 0px; */
   }
   .search-users {
     position: absolute;
@@ -116,6 +113,9 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
   }
+  .post-and-comments {
+    margin-bottom: 20px;
+  }
   .posts {
     display: flex;
     flex-direction: column;
@@ -129,9 +129,6 @@ const Container = styled.div`
     justify-content: start;
     align-items: center;
     width: 611px;
-  }
-  .post-and-comments {
-    margin-bottom: 29px;
   }
   .post {
     display: flex;
@@ -214,6 +211,7 @@ const Container = styled.div`
     font-size: 14px;
     color: #f3f3f3;
     font-weight: 700;
+    cursor: pointer;
   }
   .comment-user h2 {
     font-family: "Lato";
@@ -235,6 +233,7 @@ const Container = styled.div`
     color: #565656;
     font-family: "Lato";
     font-weight: 400;
+    margin-right: 10px;
   }
   .my-comments {
     display: flex;
@@ -335,6 +334,7 @@ const Container = styled.div`
     width: 250px;
     margin-top: 10px;
   }
+
   .link-description {
     font-family: "Lato";
     font-style: normal;
@@ -435,6 +435,13 @@ const Container = styled.div`
     font-size: 17px;
     line-height: 31px;
     color: #b7b7b7;
+  }
+  .delete {
+    position: absolute;
+    right: 20px;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
   }
   .find-hashtag {
     display: flex;
