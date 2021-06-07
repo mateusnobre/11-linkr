@@ -44,6 +44,7 @@ export default function Timeline() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isEnable, setIsEnable] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
   const [enabledGPS, setEnabledGPS] = useState(false);
   const [posts, setPosts] = useState([]);
   const [gps, setGPS] = useState([0,0]);
@@ -83,11 +84,7 @@ export default function Timeline() {
     );
 
     followRequest.then((response) => {
-      if (!response.data.users.length) {
-        alert("Você não segue ninguém ainda, procure por perfis na busca");
-        setIsLoading(false);
-        return;
-      }
+      
       const request = axios.get(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/following/posts`,
         config
@@ -112,15 +109,14 @@ export default function Timeline() {
   useInterval(loadPage, 15000);
 
   function loadPosts() {
-    setIsLoading(true)
-    const followRequest = axios.get(
+      const followRequest = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/linkr/users/follows",
       config
     );
 
     followRequest.then((response) => {
-      if (!response.data.users.length) {
-        alert("Você não segue ninguém ainda, procure por perfis na busca");
+      if (response.data.users.length == 0) {
+        setHasMore(false);
         setIsLoading(false);
         return;
       }
@@ -272,10 +268,10 @@ export default function Timeline() {
         </div>
       </div>
       <div className={isVisible ? "menu" : "menu hidden"}>
-        <Link to={"/my-posts"}>
+        <Link to={"/my-posts"} className="logout">
           My posts
         </Link>
-        <Link to={"/my-likes"}>
+        <Link to={"/my-likes"} className="logout">
           My likes
         </Link>
         <div className="logout" onClick={logout}>
@@ -320,7 +316,7 @@ export default function Timeline() {
           <InfiniteScroll
               pageStart={0}
               loadMore={loadPosts}
-              hasMore={true}
+              hasMore={hasMore}
               loader={<Loading></Loading>}
           >
             {posts.map((post) => (
