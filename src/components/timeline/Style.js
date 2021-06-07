@@ -233,6 +233,7 @@ const Container = styled.div`
     color: #565656;
     font-family: "Lato";
     font-weight: 400;
+    margin-right: 10px;
   }
   .my-comments {
     display: flex;

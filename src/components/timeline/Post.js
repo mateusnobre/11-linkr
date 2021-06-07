@@ -278,13 +278,17 @@ export default function Post(props) {
       {commentsEnable ? (
         <div className="comments-box">
           {comments.comments.map((comment) => (
-            <div className="comment-user" key={comment.id}>
+            <div
+              className="comment-user"
+              key={comment.id}
+              onClick={() => console.log(comment, id, user)}
+            >
               <img src={comment.user.avatar} alt={comment.user.username}></img>
               <div className="texts">
                 <h1 onClick={() => history.push(`/user/${comment.user.id}`)}>
                   {comment.user.username}
                   <span>
-                    {userLogged.id === comment.user.id ? "• post’s author" : ""}
+                    {user.id === comment.user.id ? "• post’s author" : ""}
                     {followersID.includes(comment.user.id) ? "• following" : ""}
                   </span>
                 </h1>
