@@ -53,9 +53,6 @@ export default function Timeline() {
     );
     request.then((response) => {
       const newArray = posts.concat(response.data.posts);
-      if (newArray.length === 0) {
-        alert("Nenhum post encontrado");
-      }
       setPosts([...newArray]);
       setIsLoading(false);
       setPageNumber(pageNumber+1);

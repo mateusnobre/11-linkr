@@ -129,9 +129,6 @@ export default function Timeline() {
         const newArray = response.data.posts.filter(
           (e) => e.user.id !== user.id
         );
-        if (newArray.length === 0) {
-          alert("Nenhuma publicação encontrada");
-        }
         setPosts(posts.concat([...newArray]));
         setIsLoading(false);
       });
